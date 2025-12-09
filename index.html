@@ -140,10 +140,6 @@
             gap: 15px;
         }
 
-        .input-group {
-            position: relative;
-        }
-
         input, textarea {
             width: 100%;
             background: #0a0a0a;
@@ -159,6 +155,11 @@
         input:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
+        }
+
+        /* Estilo visual para campos inválidos (opcional) */
+        input:invalid:not(:placeholder-shown), textarea:invalid:not(:placeholder-shown) {
+            border-color: #ef4444; /* Rojo suave si el usuario escribe mal el correo */
         }
 
         .btn-submit {
@@ -211,7 +212,7 @@
     <section class="hero">
         <h1>Herramientas de cálculo <br>para entornos industriales.</h1>
         <p>
-            Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas para tuberías y estándares internacionales.
+            Simplificamos procesos técnicos con precisión.
         </p>
         
         <a href="/tuberia/" class="btn-cta">
@@ -230,9 +231,11 @@
             </div>
 
             <div class="form-box">
-                <form action="TU_ENDPOINT_DE_FORMULARIO" method="POST">
-                    <input type="email" name="email" placeholder="Correo Electrónico Corporativo (Opcional)">
+                <form action="https://formspree.io/f/mnnebelz" method="POST">
+                    <input type="email" name="email" placeholder="Su Correo Electrónico" required>
+                    
                     <textarea name="message" rows="4" placeholder="Escriba su mensaje..." required></textarea>
+                    
                     <button type="submit" class="btn-submit">ENVIAR</button>
                 </form>
             </div>
