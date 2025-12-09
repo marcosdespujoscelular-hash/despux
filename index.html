@@ -3,221 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DESPUX | Ingeniería</title>
+    <title>DESPUX | Soluciones de Ingeniería</title>
     <style>
         :root {
-            /* Paleta de colores profesional */
-            --primary: #2c3e50;    /* Azul oscuro serio */
-            --accent: #3498db;     /* Azul brillante para acciones */
-            --bg: #f4f6f8;         /* Gris muy claro para el fondo */
-            --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --text-muted: #95a5a6;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            /* Paleta Dark Mode Corporativa */
+            --bg-body: #0a0a0a;       /* Negro casi puro */
+            --bg-surface: #141414;    /* Gris muy oscuro para secciones */
+            --primary: #3b82f6;       /* Azul técnico */
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --text-main: #ffffff;
+            --text-muted: #a3a3a3;
+            --border: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- NAV HEADER --- */
+        header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px); /* Efecto vidrio */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             color: var(--text-main);
         }
 
-        /* Contenedor Principal con animación de entrada */
-        .container {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 420px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            padding: 40px 30px;
+        .brand span {
+            color: var(--primary);
+        }
+
+        /* --- HERO SECTION (Principal) --- */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            padding: 80px 20px;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
         }
 
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h1 {
-            font-size: 2rem;
-            letter-spacing: 2px;
-            font-weight: 800;
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 40px;
-            font-weight: 500;
-        }
-
-        /* Botón Principal */
-        .btn-main {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            background-color: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2);
-            box-sizing: border-box;
-            margin-bottom: 40px;
-        }
-
-        .btn-main:hover {
-            background-color: #1a252f;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(44, 62, 80, 0.3);
-        }
-
-        /* Separador */
-        .divider {
-            height: 1px;
-            background: #eee;
-            margin: 30px 0;
-            position: relative;
-        }
-        
-        .divider::after {
-            content: 'CONTACTO';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--card-bg);
-            padding: 0 15px;
-            color: #b0bec5;
-            font-size: 0.75rem;
+        .hero h1 {
+            font-size: 3.5rem; /* Grande para escritorio */
             font-weight: 700;
-            letter-spacing: 1px;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            max-width: 800px;
         }
 
-        /* Formulario */
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 50px;
         }
 
-        .form-input {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #edf2f7;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: border-color 0.3s, background 0.3s;
-            box-sizing: border-box;
-            background: #f8fafc;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: white;
-        }
-
-        .form-input::placeholder {
-            color: #cbd5e0;
-        }
-
-        textarea.form-input {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .btn-send {
-            width: 100%;
-            padding: 14px;
-            background-color: white;
+        /* Botón estilo Cyber/Tech */
+        .btn-cta {
+            padding: 18px 40px;
+            background: transparent;
             color: var(--primary);
             border: 2px solid var(--primary);
-            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            border-radius: 4px; /* Bordes cuadrados para seriedad */
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cta:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* --- CONTACT SECTION (Estilo Web Ancha) --- */
+        .contact-section {
+            background-color: var(--bg-surface);
+            padding: 60px 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .contact-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Dos columnas en PC */
+            gap: 50px;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        .contact-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Formulario Limpio */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        input, textarea {
+            width: 100%;
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            padding: 15px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            transition: border 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            background: white;
+            color: black;
+            border: none;
+            padding: 12px 25px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
+            border-radius: 2px;
+            align-self: flex-start;
+            transition: opacity 0.3s;
         }
 
-        .btn-send:hover {
-            background-color: var(--primary);
-            color: white;
+        .btn-submit:hover {
+            opacity: 0.9;
         }
 
-        /* Pie de página */
+        /* --- FOOTER --- */
         footer {
-            margin-top: 40px;
+            padding: 30px 40px;
+            text-align: center;
             font-size: 0.8rem;
-            color: var(--text-muted);
-            border-top: 1px solid #f0f0f0;
-            padding-top: 20px;
+            color: #555;
+            background-color: #050505;
+            border-top: 1px solid #111;
         }
 
-        .author {
-            display: block;
-            font-weight: 600;
-            color: var(--primary);
-            margin-top: 4px;
+        .author-sig {
+            color: #777;
+            margin-top: 5px;
+            font-style: italic;
         }
 
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
+            .btn-cta { width: 100%; text-align: center; }
+            .btn-submit { width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>DESPUX</h1>
-        <div class="subtitle">Herramientas de Ingeniería & Cálculo</div>
+    <header>
+        <div class="brand">DESPUX <span>INGENIERÍA</span></div>
+    </header>
+
+    <section class="hero">
+        <h1>Herramientas de cálculo <br>para entornos industriales.</h1>
+        <p>
+            Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas para tuberías y estándares internacionales.
+        </p>
         
-        <a href="/tuberia/" class="btn-main">
-            Abrir Calculadora de Tuberías
+        <a href="/tuberia/" class="btn-cta">
+            Iniciar Calculadora
         </a>
+    </section>
 
-        <div class="divider"></div>
-
-        <form action="TU_ENDPOINT_DE_FORMULARIO" method="POST">
-            <div class="form-group">
-                <input type="email" name="email" class="form-input" 
-                       placeholder="Tu correo electrónico (opcional)">
+    <section class="contact-section">
+        <div class="contact-wrapper">
+            <div class="contact-info">
+                <h3>Contacto Directo</h3>
+                <p>
+                    ¿Tiene alguna consulta técnica, sugerencia sobre nuestras herramientas o requiere asistencia personalizada? 
+                    Utilice el formulario para enviar un mensaje directo a nuestra administración.
+                </p>
             </div>
-            
-            <div class="form-group">
-                <textarea name="message" class="form-input" 
-                          placeholder="Escribe tu mensaje o sugerencia aquí..." required></textarea>
-            </div>
-            
-            <button type="submit" class="btn-send">
-                Enviar Mensaje
-            </button>
-        </form>
 
-        <footer>
-            Desarrollado por
-            <span class="author">Marcos Despujos</span>
-            &copy; 2024
-        </footer>
-    </div>
+            <div class="form-box">
+                <form action="TU_ENDPOINT_DE_FORMULARIO" method="POST">
+                    <input type="email" name="email" placeholder="Correo Electrónico Corporativo (Opcional)">
+                    <textarea name="message" rows="4" placeholder="Escriba su mensaje..." required></textarea>
+                    <button type="submit" class="btn-submit">ENVIAR</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div>&copy; 2024 DESPUX. Todos los derechos reservados.</div>
+        <div class="author-sig">Desarrollado y mantenido por Marcos Despujos.</div>
+    </footer>
 
 </body>
 </html>
