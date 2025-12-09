@@ -7,9 +7,9 @@
     <style>
         :root {
             /* Paleta Dark Mode Corporativa */
-            --bg-body: #0a0a0a;       /* Negro casi puro */
-            --bg-surface: #141414;    /* Gris muy oscuro para secciones sólidas */
-            --primary: #3b82f6;       /* Azul técnico */
+            --bg-body: #0a0a0a;       
+            --bg-surface: #141414;    
+            --primary: #3b82f6;       
             --primary-glow: rgba(59, 130, 246, 0.5);
             --text-main: #ffffff;
             --text-muted: #a3a3a3;
@@ -24,50 +24,46 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-body); /* Color de respaldo si falla la imagen */
+            background-color: var(--bg-body);
             color: var(--text-main);
             line-height: 1.6;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            position: relative; /* Necesario para el pseudo-elemento del fondo */
+            position: relative;
         }
 
         /* --- FONDO PRINCIPAL DIFUMINADO --- */
         body::before {
             content: '';
-            position: fixed; /* Fijo para que cubra toda la pantalla al hacer scroll */
+            position: fixed; 
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Se coloca detrás del contenido */
+            z-index: -1; 
             
-            /* --- CAMBIO REALIZADO AQUÍ --- */
-            /* Se ha actualizado la URL para usar la imagen raw de GitHub */
+            /* --- URL CORREGIDA AQUÍ --- */
             background: linear-gradient(rgba(5, 5, 5, 0.85), rgba(10, 10, 10, 0.95)), 
-                        url('https://raw.githubusercontent.com/despux/img1/main/head.png');
+                        url('https://raw.githubusercontent.com/marcosdespujoscelular-hash/despux/main/img1/head.png');
             
-            background-size: cover; /* Cubre todo el espacio sin deformarse */
+            background-size: cover; 
             background-position: center center;
             background-repeat: no-repeat;
             
-            /* Aplica el difuminado. Ajusta el valor de px si quieres más o menos blur */
             filter: blur(12px);
-            /* Un pequeño escalado evita bordes blancos extraños causados por el blur en algunos navegadores */
             transform: scale(1.02); 
         }
 
-        /* --- NAV HEADER --- */
+        /* --- RESTO DEL CSS (Idéntico) --- */
         header {
             padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            /* Hacemos el header un poco más transparente para que se note el fondo */
             background: rgba(10, 10, 10, 0.7); 
-            backdrop-filter: blur(15px); /* Efecto vidrio esmerilado */
+            backdrop-filter: blur(15px); 
             position: sticky;
             top: 0;
             z-index: 100;
@@ -85,7 +81,6 @@
             color: var(--primary);
         }
 
-        /* --- HERO SECTION (Principal) --- */
         .hero {
             flex: 1;
             display: flex;
@@ -94,7 +89,6 @@
             align-items: center;
             text-align: center;
             padding: 80px 20px;
-            /* Fondo transparente para que se vea la imagen difuminada del body */
             background: transparent; 
         }
 
@@ -104,7 +98,7 @@
             margin-bottom: 20px;
             line-height: 1.1;
             max-width: 800px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Sombra sutil para mejorar lectura sobre imagen */
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5); 
         }
 
         .hero p {
@@ -115,10 +109,9 @@
             text-shadow: 0 1px 5px rgba(0,0,0,0.5);
         }
 
-        /* Botón estilo Cyber/Tech */
         .btn-cta {
             padding: 18px 40px;
-            background: rgba(10, 10, 10, 0.5); /* Fondo semi-transparente */
+            background: rgba(10, 10, 10, 0.5); 
             color: var(--primary);
             border: 2px solid var(--primary);
             font-size: 1rem;
@@ -139,14 +132,12 @@
             box-shadow: 0 0 30px var(--primary-glow);
         }
 
-        /* --- CONTACT SECTION (Estilo Web Ancha) --- */
-        /* Mantenemos esta sección sólida para contraste visual */
         .contact-section {
             background-color: var(--bg-surface); 
             padding: 60px 40px;
             border-top: 1px solid var(--border);
             position: relative;
-            z-index: 1; /* Asegura que quede por encima del fondo */
+            z-index: 1; 
         }
 
         .contact-wrapper {
@@ -167,7 +158,6 @@
             font-size: 0.95rem;
         }
 
-        /* Formulario Limpio */
         form {
             display: flex;
             flex-direction: column;
@@ -211,7 +201,6 @@
             opacity: 0.9;
         }
 
-        /* --- FOOTER --- */
         footer {
             padding: 30px 40px;
             text-align: center;
@@ -229,7 +218,6 @@
             font-style: italic;
         }
 
-        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
