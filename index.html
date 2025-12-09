@@ -1,116 +1,106 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <title>DESPUX - Inicio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DESPUX | Soluciones de Ingeniería</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
-    
     <style>
-        /* Reseteo básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #0f172a; /* Azul oscuro profundo (casi negro) */
-            color: #ffffff;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-image: radial-gradient(circle at top right, #1e293b 0%, #0f172a 60%);
-        }
-
-        /* Contenedor principal para centrar todo */
-        .container {
+            font-family: Arial, sans-serif;
             text-align: center;
-            padding: 20px;
-            animation: fadeIn 1.5s ease;
+            padding-top: 50px; /* Reduje un poco para dar espacio al form */
+            background-color: #f9f9f9;
+            margin: 0;
+            padding-bottom: 50px;
         }
-
-        /* Estilo del Logo DESPUX */
-        .logo {
-            font-size: 4rem;
-            font-weight: 800;
-            letter-spacing: -2px;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #38bdf8, #818cf8); /* Degradado azul a violeta */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0px 4px 20px rgba(56, 189, 248, 0.3);
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
         }
-
-        .tagline {
-            font-size: 1.1rem;
-            font-weight: 300;
-            color: #94a3b8; /* Gris azulado suave */
-            margin-bottom: 50px;
-            letter-spacing: 1px;
-        }
-
-        /* Estilo del Botón Moderno */
-        .btn-modern {
+        .btn {
             display: inline-block;
-            padding: 18px 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 10px 20px;
+            font-size: 16px;
             color: white;
-            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            background-color: #007bff; /* Color azul */
             border: none;
-            border-radius: 50px; /* Bordes totalmente redondos */
-            text-decoration: none;
-            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.5); /* Sombra suave */
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            border-radius: 5px;
+            text-decoration: none; /* Quitar el subrayado del enlace */
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
         }
 
-        /* Efecto Hover (al pasar el mouse) */
-        .btn-modern:hover {
-            transform: translateY(-3px); /* Se eleva un poco */
-            box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.7);
-            filter: brightness(1.1);
+        /* Estilos para el formulario */
+        .contact-container {
+            max-width: 400px;
+            margin: 40px auto 0; /* Separación de arriba */
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: left;
         }
-
-        .btn-modern:active {
-            transform: translateY(1px);
+        .contact-container h3 {
+            margin-top: 0;
+            color: #555;
+            text-align: center;
         }
-
-        /* Animación de entrada suave */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; /* Para que el padding no rompa el ancho */
+            font-family: Arial, sans-serif;
         }
-
-        /* Pie de página pequeño */
-        footer {
-            position: absolute;
-            bottom: 20px;
-            font-size: 0.8rem;
-            color: #475569;
+        .submit-btn {
+            width: 100%;
+            background-color: #28a745; /* Verde para diferenciar enviar */
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <h1 class="logo">DESPUX</h1>
-        
-        <p class="tagline">Ingeniería & Cálculo</p>
-
-        <a href="/tuberia/" class="btn-modern">
+    <h1>DESPUX</h1>
+    
+    <div style="margin-bottom: 30px;">
+        <a href="/tuberia/" class="btn">
             Calculadora Tubería
         </a>
+
+        <p style="margin-top: 20px;">
+            <a href="/planos/" style="color: #007bff; text-decoration: none;">Ver nuestros Planos</a>
+        </p>
     </div>
 
-    <footer>
-        &copy; 2025 Despux.net
-    </footer>
+    <hr style="border: 0; border-top: 1px solid #eee; max-width: 300px; margin: 0 auto;">
+
+    <div class="contact-container">
+        <h3>📩 Contáctame</h3>
+        <p style="font-size: 14px; color: #666; text-align: center; margin-bottom: 20px;">
+            ¿Tienes alguna duda o sugerencia? Escríbeme aquí abajo.
+        </p>
+
+        <form action="https://formspree.io/f/mnnebelz" method="POST">
+            
+            <input type="email" name="email" class="form-input" 
+                   placeholder="Tu correo electrónico (Opcional)">
+            
+            <textarea name="message" rows="5" class="form-input" 
+                      placeholder="Escribe tu mensaje aquí..." required></textarea>
+            
+            <button type="submit" class="btn submit-btn">
+                Enviar Mensaje
+            </button>
+        </form>
+    </div>
 
 </body>
 </html>
