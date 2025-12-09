@@ -3,30 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-key="appTitle">Guía Técnica Tuberías</title>
-    <meta name="theme-color" content="#2c3e50">
+    <title data-key="appTitle">Guía Técnica Tuberías | DESPUX</title>
+    <meta name="theme-color" content="#0a0a0a">
     
     <style>
         :root {
-            --sanitary-color: #0056b3;  /* Azul para Sanitario */
-            --heavy-color: #7f8c8d;     /* Gris Oscuro para Industria Pesada */
-            --bg: #f0f2f5;
-            --white: #ffffff;
-            --current-color: #0056b3; 
-            --dim-color: #555;
-            /* Colores individuales de normas para los sub-botones */
+            /* --- COLORES DE NORMAS --- */
+            --sanitary-color: #0056b3;
+            --heavy-color: #7f8c8d;
             --din-color: #0056b3; 
             --astm-color: #ff9800;
             --sms-color: #2e7d32;
             --iso-color: #9c27b0;
             --sch-color: #455a64;
             --carb-color: #7f8c8d;
-            --hint-color: #e67e22; /* Naranja para la sección de sugerencia */
+            --hint-color: #e67e22;
+            
+            /* --- PALETA DARK MODE --- */
+            --bg-main: #0a0a0a;
+            --bg-card: #141414;
+            --bg-elements: #222222;
+            --text-main: #ffffff;
+            --text-muted: #a3a3a3;
+            --border-color: #333333;
+            --brand-blue: #3b82f6; 
+            
+            --current-color: var(--sanitary-color); 
         }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
+            background-color: var(--bg-main);
+            color: var(--text-main);
             margin: 0;
             padding: 15px;
             display: flex;
@@ -38,15 +46,17 @@
         }
 
         .card {
-            background: var(--white);
+            background: var(--bg-card);
             border-radius: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
             padding: 20px;
             width: 100%;
             max-width: 400px;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            margin-top: 20px;
         }
 
         .card::before {
@@ -55,17 +65,31 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 6px;
+            height: 4px;
             background: var(--current-color);
             transition: background 0.3s;
         }
 
-        h1 {
-            color: #333;
-            font-size: 1.2rem;
-            margin: 10px 0 20px 0;
+        /* HEADER BRAND */
+        .brand-header {
+            display: block;
             text-align: center;
+            font-size: 1.5rem;
             font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-main);
+            text-decoration: none; 
+            margin: 15px 0 25px 0;
+            transition: opacity 0.3s;
+        }
+        
+        .brand-header:hover {
+            opacity: 0.8; 
+        }
+
+        .brand-header span {
+            color: var(--brand-blue); 
         }
 
         /* Language Selector */
@@ -78,50 +102,55 @@
             z-index: 10;
         }
         .flag-icon {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
+            opacity: 0.6;
+            transition: all 0.2s;
+            border: 2px solid transparent;
         }
         .flag-icon.active {
-            border: 2px solid var(--current-color);
+            border-color: var(--current-color);
             transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            opacity: 1;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
-        /* Tabs (Grupos Principal) */
+        /* Tabs */
         .group-tabs-container {
             display: flex;
             justify-content: space-around;
             gap: 15px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             width: 100%;
         }
 
         .group-tab {
-            padding: 10px 18px;
+            padding: 12px 18px;
             border-radius: 25px;
-            background: #eee;
-            color: #666;
-            font-size: 0.9rem;
+            background: var(--bg-elements);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
             font-weight: 700;
             white-space: nowrap;
             cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
+            transition: all 0.3s;
             flex-grow: 1;
             text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .group-tab.active {
             background: var(--current-color);
             color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-color: var(--current-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* Sub-tabs (Normas Individuales) */
+        /* Sub-tabs */
         #normTabsContainer {
             display: flex;
             overflow-x: auto;
@@ -130,60 +159,117 @@
             margin-bottom: 25px;
             scrollbar-width: none;
             width: 100%;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
             padding-top: 5px;
             max-height: 0;
             opacity: 0;
             transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
         }
         #normTabsContainer.visible {
-            max-height: 50px;
+            max-height: 60px;
             opacity: 1;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         #normTabsContainer::-webkit-scrollbar { display: none; }
 
         .norm-tab {
-            padding: 8px 12px;
+            padding: 8px 14px;
             border-radius: 15px;
-            background: #f0f0f0;
-            color: #666;
-            font-size: 0.8rem;
+            background: var(--bg-elements);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            font-size: 0.75rem;
             font-weight: 600;
             white-space: nowrap;
             cursor: pointer;
             transition: all 0.2s;
-            border: 1px solid transparent;
         }
 
         .norm-tab.active {
             background: var(--current-color);
             color: white;
             border-color: var(--current-color);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        /* Select */
+        /* Select Input */
         select {
             width: 100%;
             padding: 14px;
             font-size: 1.1rem;
-            border: 2px solid #e0e0e0;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            background-color: #fff;
+            background-color: var(--bg-elements);
+            color: var(--text-main);
             margin-bottom: 20px;
             outline: none;
             font-weight: 500;
-            color: #333;
+            transition: border-color 0.3s;
         }
+        select:focus {
+            border-color: var(--current-color);
+        }
+
+        /* Visual Pipe SVG */
+        .visual-container {
+            height: 220px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: var(--bg-elements);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+        }
+        
+        svg { overflow: visible; } 
+        .dim-line { stroke: var(--text-muted); stroke-width: 1.5; fill: none; } 
+        .dim-text { font-size: 12px; fill: var(--text-muted); font-weight: bold; text-anchor: middle; } 
+        .pipe-body { fill: url(#metalGradientDark); stroke: #333; stroke-width: 1; transition: all 0.3s ease; } 
+        .pipe-hole { fill: var(--bg-elements); stroke: #444; stroke-width: 1; transition: all 0.3s ease; }
+
+        /* App Info Box */
+        .app-info { 
+            background: var(--bg-elements); 
+            border-left: 4px solid var(--current-color); 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 25px; 
+            text-align: left; 
+            transition: border-color 0.3s; 
+            border: 1px solid var(--border-color);
+            border-left-width: 4px;
+        } 
+        .app-title { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 5px; } 
+        .app-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.5; }
+        .app-text strong { color: var(--current-color); }
+
+        /* Data Grid */
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; } 
+        .data-box { 
+            background: var(--bg-elements); 
+            padding: 15px 12px; 
+            border-radius: 12px; 
+            text-align: center; 
+            border: 1px solid var(--border-color); 
+        } 
+        .data-box.highlight { 
+            grid-column: span 2; 
+            background: color-mix(in srgb, var(--current-color) 15%, var(--bg-elements));
+            border-color: var(--current-color);
+        } 
+        .data-label { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; } 
+        .data-value { font-size: 1.5rem; font-weight: 800; color: var(--text-main); } 
+        .unit { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
 
         /* Input Hint Section */
         .hint-section {
-            border: 1px solid #ccc;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 15px;
-            margin-bottom: 20px;
-            background: #fff8f5;
+            margin-bottom: 10px;
+            background: var(--bg-elements);
             text-align: left;
         }
 
@@ -192,28 +278,34 @@
             font-size: 0.8rem;
             font-weight: 700;
             color: var(--hint-color);
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .hint-input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             font-size: 1.2rem;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
+            background-color: var(--bg-card);
             outline: none;
             text-align: center;
             font-weight: 600;
-            color: #333;
+            color: var(--text-main);
             box-sizing: border-box;
+            transition: border-color 0.3s;
         }
+        .hint-input:focus { border-color: var(--hint-color); }
 
         /* Resultados Sugeridos */
         #resultadosSugeridos {
             margin-top: 15px;
-            background: #ffffff;
+            background: var(--bg-card);
             border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
         }
         
         #resultadosSugeridos table {
@@ -223,20 +315,24 @@
         }
 
         #resultadosSugeridos th, #resultadosSugeridos td {
-            padding: 8px 5px;
+            padding: 10px 8px;
             text-align: center;
+            color: var(--text-main);
         }
         
         #resultadosSugeridos th {
-            background-color: #f0f0f0;
+            background-color: var(--bg-elements);
             font-weight: 700;
-            color: #555;
-            border-bottom: 2px solid #ddd;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.7rem;
         }
         
         #resultadosSugeridos td {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
+        #resultadosSugeridos tr:last-child td { border-bottom: none; }
 
         #resultadosSugeridos .res-name {
             font-weight: 600;
@@ -248,42 +344,43 @@
             color: var(--hint-color);
         }
 
-        /* Visual Pipe SVG Container */
-        .visual-container {
-            height: 220px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            background: #fdfdfd;
-            border-radius: 15px;
-            border: 1px solid #eee;
-        }
-        
-        /* SVG styles */
-        svg { overflow: visible; } 
-        .dim-line { stroke: var(--dim-color); stroke-width: 1.5; fill: none; } 
-        .dim-text { font-size: 12px; fill: var(--dim-color); font-weight: bold; text-anchor: middle; } 
-        .pipe-body { fill: url(#metalGradient); stroke: #999; stroke-width: 1; transition: all 0.3s ease; } 
-        .pipe-hole { fill: var(--white); stroke: #ccc; stroke-width: 1; transition: all 0.3s ease; }
-
-        /* App Info Box */
-        .app-info { background: #f8f9fa; border-left: 5px solid var(--current-color); padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: left; transition: border-color 0.3s; } 
-        .app-title { font-size: 0.75rem; font-weight: 700; color: #555; text-transform: uppercase; display: block; margin-bottom: 5px; } 
-        .app-text { font-size: 0.9rem; color: #333; line-height: 1.4; }
-
-        /* Data Grid */
-        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } 
-        .data-box { background: #f8f9fa; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #eee; } 
-        .data-box.highlight { grid-column: span 2; background: #eff6ff; } 
-        .data-label { font-size: 0.7rem; color: #777; margin-bottom: 5px; text-transform: uppercase; font-weight: 600; } 
-        .data-value { font-size: 1.4rem; font-weight: 800; color: #2c3e50; } 
-        .unit { font-size: 0.8rem; font-weight: 500; color: #888; }
-
+        /* FOOTER */
         footer {
-            margin-top: 30px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .btn-home {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: transparent;
+            color: var(--text-main);
+            border: 2px solid var(--border-color);
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-home:hover {
+            border-color: var(--text-main);
+            background-color: rgba(255,255,255,0.05);
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .footer-info {
             font-size: 0.7rem;
-            color: #999;
+            color: var(--text-muted);
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -294,25 +391,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px; /* Espacio entre el texto y el icono */
-            margin-top: 8px;
-            font-size: 0.6rem;
-            color: #bdc3c7;
+            gap: 8px;
+            margin-top: 10px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
             letter-spacing: 0.5px;
             opacity: 0.8;
             font-weight: 400;
-            font-style: italic;
         }
 
         .linkedin-icon {
-            width: 18px; /* Tamaño del icono */
-            height: 18px;
+            width: 20px;
+            height: 20px;
             vertical-align: middle;
             transition: transform 0.2s;
+            filter: grayscale(100%);
+            opacity: 0.7;
         }
 
         .linkedin-icon:hover {
             transform: scale(1.1);
+            filter: grayscale(0%);
+            opacity: 1;
         }
     </style>
 </head>
@@ -325,11 +425,13 @@
             <img src="https://flagicons.lipis.dev/flags/4x3/de.svg" class="flag-icon" id="flag-de" onclick="setLanguage('de')">
         </div>
 
-        <h1 data-key="mainTitle">Guía Técnica Tuberías</h1>
+        <a href="https://www.despux.net" class="brand-header">
+            DESPUX <span>INGENIERÍA</span>
+        </a>
         
         <div class="group-tabs-container">
-            <div class="group-tab" onclick="setGroup('SANITARY', this)" data-group-key="SANITARY" data-key="sanitaryLabel" style="--tab-c: var(--sanitary-color)">Inox Sanitario</div>
-            <div class="group-tab" onclick="setGroup('HEAVY', this)" data-group-key="HEAVY" data-key="heavyLabel" style="--tab-c: var(--heavy-color)">Industria Pesada</div>
+            <div class="group-tab" onclick="setGroup('SANITARY', this)" data-group-key="SANITARY" data-key="sanitaryLabel">Inox Sanitario</div>
+            <div class="group-tab" onclick="setGroup('HEAVY', this)" data-group-key="HEAVY" data-key="heavyLabel">Industria Pesada</div>
         </div>
 
         <div id="normTabsContainer">
@@ -338,26 +440,28 @@
         <select id="pipeSelect" onchange="updateData()"></select>
 
         <div class="visual-container">
-            <svg width="200" height="200" viewBox="-120 -100 240 220">
+            <svg width="200" height="200" viewBox="-110 -100 220 200">
                 <defs>
-                    <linearGradient id="metalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#cfd8dc;stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:#b0bec5;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#cfd8dc;stop-opacity:1" />
+                    <linearGradient id="metalGradientDark" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#444;stop-opacity:1" />
+                        <stop offset="25%" style="stop-color:#777;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#eee;stop-opacity:1" />
+                        <stop offset="75%" style="stop-color:#777;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#444;stop-opacity:1" />
                     </linearGradient>
                     <marker id="arrowEnd" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-                        <path d="M0,0 L10,5 L0,10 z" fill="var(--dim-color)" />
+                        <path d="M0,0 L10,5 L0,10 z" fill="var(--text-muted)" />
                     </marker>
                     <marker id="arrowStart" markerWidth="10" markerHeight="10" refX="1" refY="5" orient="auto">
-                         <path d="M10,0 L0,5 L10,10 z" fill="var(--dim-color)" />
+                         <path d="M10,0 L0,5 L10,10 z" fill="var(--text-muted)" />
                     </marker>
                 </defs>
 
-                <circle id="svgOuterCircle" r="90" class="pipe-body" />
-                <circle id="svgInnerCircle" r="80" class="pipe-hole" />
+                <circle id="svgOuterCircle" r="85" class="pipe-body" />
+                <circle id="svgInnerCircle" r="70" class="pipe-hole" />
 
                 <g id="dimID">
-                    <line id="idLine" x1="-80" y1="0" x2="80" y2="0" class="dim-line" marker-start="url(#arrowStart)" marker-end="url(#arrowEnd)"/>
+                    <line id="idLine" x1="-70" y1="0" x2="70" y2="0" class="dim-line" marker-start="url(#arrowStart)" marker-end="url(#arrowEnd)"/>
                     <text x="0" y="-8" class="dim-text">ID</text>
                 </g>
             </svg>
@@ -393,100 +497,107 @@
     </div>
 
     <footer>
-        <span id="footerDesc" data-key="footerDesc">Master de Tuberías v8.4 REVISADA (Arreglo del Script)</span>
-        <span class="author-signature">
-            Dev: Marcos Despujos
-            <a href="https://www.linkedin.com/in/marcos-despujos/" target="_blank" rel="noopener noreferrer">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="linkedin-icon">
-            </a>
-        </span>
+        <a href="https://www.despux.net" class="btn-home">
+            ← GO HOME
+        </a>
+
+        <div class="footer-info">
+            <span id="footerDesc" data-key="footerDesc">Master de Tuberías v8.7 (Visualización Escalada)</span>
+            <span class="author-signature">
+                Dev: Marcos Despujos
+                <a href="https://www.linkedin.com/in/marcos-despujos/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="linkedin-icon">
+                </a>
+            </span>
+        </div>
     </footer>
 
     <script>
         const translations = {
             es: {
-                appTitle: "Guía Técnica Tuberías",
-                mainTitle: "Guía Técnica Tuberías",
+                appTitle: "Guía Técnica Tuberías | DESPUX",
                 appUsesTitle: "Usos y Aplicaciones:",
                 odLabel: "Diámetro Ext (OD)",
                 wallLabel: "Pared",
                 idLabel: "Diámetro Interior",
-                hintLabel: "Hint OD (mm)",
+                hintLabel: "Buscar por OD (mm)",
                 hintTableHeaderName: "Tubería Sugerida",
                 hintTableHeaderOD: "OD Real",
-                hintTableHeaderDiff: "Diferencia (mm)",
-                footerDesc: "Master de Tuberías v8.4 REVISADA (Arreglo del Script)",
+                hintTableHeaderDiff: "Dif.",
+                footerDesc: "Master de Tuberías v8.7 (Visualización Escalada)",
                 sanitaryLabel: "Inox Sanitario",
                 heavyLabel: "Industria Pesada",
-                DIN: "DIN", ASTM: "ASTM/BPE", SMS: "SMS", ISO: "ISO", SCH: "Inox SCH", CARB: "Acero Carbono",
-                dinApp: "Estándar Europeo DIN. Principalmente para <strong>Industria Alimentaria, Cervecerías y Lácteos</strong>. Compatible con uniones roscadas DIN 11851.",
-                astmApp: "Estándar Americano ASTM/BPE. El estándar 'oro' para <strong>Farmacéutica, Biotecnología</strong> y Alta Pureza. Usa férulas Clamp.",
-                smsApp: "Estándar Sueco SMS. Específico para <strong>Industria Láctea y Bebidas</strong> (Tetra Pak).",
-                isoApp: "Estándar Internacional ISO (Series 1). Usado en <strong>Química fina y Procesos Mixtos</strong>.",
-                schApp: "Tubería Industrial Inox SCH. Acero inoxidable de **pared gruesa (Sch 10S/40S)** para presión sin acabado sanitario.",
-                carbApp: "Tubería de **Acero al Carbono (CARB)** (ASTM A106/API). Paredes Sch 40, 80 y 160 para <strong>Alta Presión, Pulmones de Aire, Gas, y Vapor</strong>."
+                DIN: "DIN 11850", ASTM: "ASME BPE", SMS: "SMS 3008", ISO: "ISO 1127", SCH: "ASTM A312 (Sch)", CARB: "API 5L/A106 (CS)",
+                noCloseMatches: "Sin coincidencias cercanas (±10mm)",
+                dinApp: "Estándar Europeo. Principalmente para <strong>Industria Alimentaria, Cervecerías y Lácteos</strong>. Compatible con uniones roscadas DIN 11851.",
+                astmApp: "Estándar Americano de Alta Pureza (BPE). El estándar 'oro' para <strong>Farmacéutica y Biotecnología</strong>. Utiliza uniones Clamp.",
+                smsApp: "Estándar Sueco. Muy común en la <strong>Industria Láctea y de Bebidas</strong> (Procesos tipo Tetra Pak).",
+                isoApp: "Estándar Internacional (Series 1). Frecuente en <strong>Química fina, tratamiento de aguas y procesos mixtos</strong>.",
+                schApp: "Tubería Industrial Inox (Schedule). Para líneas de proceso con presión y temperatura. <strong>Química, Petroquímica, Vapor limpio</strong>. No sanitaria.",
+                carbApp: "Acero al Carbono (Schedule). Para servicios generales de alta presión: <strong>Industriedampf, Druckluft, Gas, Thermalöl</strong>."
             }
             ,
             en: {
-                appTitle: "Technical Piping Guide",
-                mainTitle: "Technical Piping Guide",
+                appTitle: "Technical Piping Guide | DESPUX",
                 appUsesTitle: "Uses and Applications:",
                 odLabel: "External Diameter (OD)",
                 wallLabel: "Wall Thickness",
                 idLabel: "Internal Diameter",
-                hintLabel: "OD Hint (mm)",
+                hintLabel: "Search by OD (mm)",
                 hintTableHeaderName: "Suggested Pipe",
                 hintTableHeaderOD: "Actual OD",
-                hintTableHeaderDiff: "Difference (mm)",
-                footerDesc: "Piping Master v8.4 REVISED (Script Fix)",
+                hintTableHeaderDiff: "Diff.",
+                footerDesc: "Piping Master v8.7 (Scaled Visualization)",
                 sanitaryLabel: "Sanitary Stainless",
                 heavyLabel: "Heavy Industry",
-                DIN: "DIN", ASTM: "ASTM/BPE", SMS: "SMS", ISO: "ISO", SCH: "Stainless SCH", CARB: "Carbon Steel",
-                dinApp: "European DIN Standard. Primarily for <strong>Food Industry, Breweries, and Dairies</strong>. Compatible with DIN 11851 threaded connections.",
-                astmApp: "American ASTM/BPE Standard. The 'gold standard' for <strong>Pharmaceuticals, Biotechnology</strong> and High Purity. Uses Clamp ferrules.",
-                smsApp: "Swedish SMS Standard. Specific for <strong>Dairy and Beverage Industry</strong> (Tetra Pak).",
-                isoApp: "International ISO Standard (Series 1). Used in <strong>Fine Chemicals and Mixed Processes</strong>.",
-                schApp: "Industrial Stainless SCH Pipe. **Thick wall (Sch 10S/40S)** stainless steel for pressure without sanitary finish.",
-                carbApp: "**Carbon Steel Pipe (CARB)** (ASTM A106/API). Sch 40, 80, and 160 walls for <strong>High Pressure Systems, Air Receivers, Gas, and Steam</strong>."
+                DIN: "DIN 11850", ASTM: "ASME BPE", SMS: "SMS 3008", ISO: "ISO 1127", SCH: "ASTM A312 (Sch)", CARB: "API 5L/A106 (CS)",
+                noCloseMatches: "No close matches found (±10mm)",
+                dinApp: "European Standard. Mainly for <strong>Food Industry, Breweries, and Dairies</strong>. Compatible with DIN 11851 threaded unions.",
+                astmApp: "American High Purity Standard (BPE). The 'gold standard' for <strong>Pharmaceuticals and Biotechnology</strong>. Uses Clamp connections.",
+                smsApp: "Swedish Standard. Very common in <strong>Dairy and Beverage Industry</strong> (Tetra Pak type processes).",
+                isoApp: "International Standard (Series 1). Frequent in <strong>Fine Chemicals, water treatment and mixed processes</strong>.",
+                schApp: "Industrial Stainless Pipe (Schedule). For process lines with pressure and temperature. <strong>Chemical, Petrochemical, Clean Steam</strong>. Non-sanitary.",
+                carbApp: "Carbon Steel (Schedule). For general high-pressure services: <strong>Industrial Steam, Compressed Air, Gas, Thermal Oil</strong>."
             },
             de: {
-                appTitle: "Technische Rohrleitungsführung",
-                mainTitle: "Technische Rohrleitungsführung",
+                appTitle: "Technische Rohrleitungsführung | DESPUX",
                 appUsesTitle: "Anwendungen:",
                 odLabel: "Außendurchmesser (OD)",
                 wallLabel: "Wandstärke",
                 idLabel: "Innendurchmesser",
-                hintLabel: "OD Hinweis (mm)",
+                hintLabel: "Suche nach OD (mm)",
                 hintTableHeaderName: "Vorgeschlagenes Rohr",
                 hintTableHeaderOD: "Tatsächlicher OD",
-                hintTableHeaderDiff: "Differenz (mm)",
-                footerDesc: "Rohrleitungs-Master v8.4 REVIDIERT (Skriptkorrektur)",
+                hintTableHeaderDiff: "Diff.",
+                footerDesc: "Rohrleitungs-Master v8.7 (Skalierte Visualisierung)",
                 sanitaryLabel: "Sanitär Edelstahl",
                 heavyLabel: "Schwerindustrie",
-                DIN: "DIN", ASTM: "ASTM/BPE", SMS: "SMS", ISO: "ISO", SCH: "Edelstahl SCH", CARB: "Kohlenstoffstahl",
-                dinApp: "Europäischer DIN-Standard. Hauptsächlich für die <strong>Lebensmittelindustrie, Brauereien und Molkereien</strong>. Kompatibel mit DIN 11851 Schraubverbindungen.",
-                astmApp: "Amerikanischer ASTM/BPE-Standard. Der 'Goldstandard' für <strong>Pharmazeutika, Biotechnologie</strong> und Hochreinheit. Verwendet Klemmverbindungen.",
-                smsApp: "Schwedischer SMS-Standard. Spezifisch für die <strong>Molkerei- und Getränkeindustrie</strong> (Tetra Pak).",
-                isoApp: "Internationaler ISO-Standard (Serie 1). Verwendet in der <strong>Feinchemie und gemischten Prozessen</strong>.",
-                schApp: "Industrielles Edelstahl-SCH-Rohr. **Dickwandiger (Sch 10S/40S)** Edelstahl für Druck ohne hygienische Oberfläche.",
-                carbApp: "**Kohlenstoffstahlrohr (CARB)** (ASTM A106/API). Sch 40, 80 und 160 Wandstärken für <strong>Hochdrucksysteme, Luftbehälter, Gas und Dampf</strong>."
+                DIN: "DIN 11850", ASTM: "ASME BPE", SMS: "SMS 3008", ISO: "ISO 1127", SCH: "ASTM A312 (Sch)", CARB: "API 5L/A106 (CS)",
+                noCloseMatches: "Keine nahen Übereinstimmungen (±10mm)",
+                dinApp: "Europäischer Standard. Hauptsächlich für <strong>Lebensmittelindustrie, Brauereien und Molkereien</strong>. Kompatibel mit DIN 11851 Verschraubungen.",
+                astmApp: "Amerikanischer Hochreinheitsstandard (BPE). Der 'Goldstandard' für <strong>Pharma und Biotechnologie</strong>. Verwendet Clamp-Verbindungen.",
+                smsApp: "Schwedischer Standard. Sehr verbreitet in der <strong>Molkerei- und Getränkeindustrie</strong> (Tetra Pak Prozesse).",
+                isoApp: "Internationaler Standard (Serie 1). Häufig in <strong>Feinchemie, Wasseraufbereitung und gemischten Prozessen</strong>.",
+                schApp: "Industrielles Edelstahlrohr (Schedule). Für Prozesslinien mit Druck und Temperatur. <strong>Chemie, Petrochemie, Reindampf</strong>. Nicht sanitär.",
+                carbApp: "Kohlenstoffstahl (Schedule). Für allgemeine Hochdruckdienste: <strong>Industriedampf, Druckluft, Gas, Thermalöl</strong>."
             }
         };
 
         const db = {
-            DIN: { color: '#0056b3', appKey: "dinApp", data: [{ name: "DIN 25", od: 29.0, wall: 1.5 }, { name: "DN 32", od: 35.0, wall: 1.5 }, { name: "DN 40", od: 41.0, wall: 1.5 }, { name: "DN 50", od: 53.0, wall: 1.5 }, { name: "DN 65", od: 70.0, wall: 2.0 }, { name: "DN 80", od: 85.0, wall: 2.0 }, { name: "DN 100", od: 104.0, wall: 2.0 }] },
-            ASTM: { color: '#ff9800', appKey: "astmApp", data: [{ name: '1/2" BPE', od: 12.7, wall: 1.65 }, { name: '3/4" BPE', od: 19.05, wall: 1.65 }, { name: '1" BPE', od: 25.4, wall: 1.65 }, { name: '1½" BPE', od: 38.1, wall: 1.65 }, { name: '2" BPE', od: 50.8, wall: 1.65 }, { name: '2½" BPE', od: 63.5, wall: 1.65 }, { name: '3" BPE', od: 76.2, wall: 1.65 }, { name: '4" BPE', od: 101.6, wall: 2.11 }] },
-            SMS: { color: '#2e7d32', appKey: "smsApp", data: [{ name: "SMS 25", od: 25.0, wall: 1.2 }, { name: "SMS 38", od: 38.0, wall: 1.2 }, { name: "SMS 51", od: 51.0, wall: 1.2 }, { name: "SMS 63.5", od: 63.5, wall: 1.6 }, { name: "SMS 76", od: 76.1, wall: 1.6 }, { name: "SMS 101", od: 101.6, wall: 2.0 }] },
-            ISO: { color: '#9c27b0', appKey: "isoApp", data: [{ name: "ISO 15 (21.3)", od: 21.3, wall: 1.6 }, { name: "ISO 20 (26.9)", od: 26.9, wall: 1.6 }, { name: "ISO 25 (33.7)", od: 33.7, wall: 2.0 }, { name: "ISO 32 (42.4)", od: 42.4, wall: 2.0 }, { name: "ISO 40 (48.3)", od: 48.3, wall: 2.0 }, { name: "ISO 50 (60.3)", od: 60.3, wall: 2.0 }, { name: "ISO 65 (76.1)", od: 76.1, wall: 2.0 }, { name: "ISO 80 (88.9)", od: 88.9, wall: 2.3 }, { name: "ISO 100 (114.3)", od: 114.3, wall: 2.6 }] },
-            SCH: { color: '#455a64', appKey: "schApp", data: [{ name: '1" Sch 10S (Inox)', od: 33.4, wall: 2.77 }, { name: '1½" Sch 40S (Inox)', od: 48.3, wall: 3.68 }, { name: '2" Sch 40S (Inox)', od: 60.3, wall: 3.91 }, { name: '3" Sch 40S (Inox)', od: 88.9, wall: 5.49 }, { name: '4" Sch 40S (Inox)', od: 114.3, wall: 6.02 }] },
+            DIN: { color: '#0056b3', appKey: "dinApp", data: [{ name: "DN 10 (DIN)", od: 13.0, wall: 1.5 }, { name: "DN 15 (DIN)", od: 19.0, wall: 1.5 }, { name: "DN 20 (DIN)", od: 23.0, wall: 1.5 }, { name: "DN 25 (DIN)", od: 29.0, wall: 1.5 }, { name: "DN 32 (DIN)", od: 35.0, wall: 1.5 }, { name: "DN 40 (DIN)", od: 41.0, wall: 1.5 }, { name: "DN 50 (DIN)", od: 53.0, wall: 1.5 }, { name: "DN 65 (DIN)", od: 70.0, wall: 2.0 }, { name: "DN 80 (DIN)", od: 85.0, wall: 2.0 }, { name: "DN 100 (DIN)", od: 104.0, wall: 2.0 }, { name: "DN 125 (DIN)", od: 129.0, wall: 2.0 }, { name: "DN 150 (DIN)", od: 154.0, wall: 2.0 }] },
+            ASTM: { color: '#ff9800', appKey: "astmApp", data: [{ name: '¼" BPE', od: 6.35, wall: 0.89 }, { name: '⅜" BPE', od: 9.53, wall: 0.89 }, { name: '½" BPE', od: 12.7, wall: 1.65 }, { name: '¾" BPE', od: 19.05, wall: 1.65 }, { name: '1" BPE', od: 25.4, wall: 1.65 }, { name: '1½" BPE', od: 38.1, wall: 1.65 }, { name: '2" BPE', od: 50.8, wall: 1.65 }, { name: '2½" BPE', od: 63.5, wall: 1.65 }, { name: '3" BPE', od: 76.2, wall: 1.65 }, { name: '4" BPE', od: 101.6, wall: 2.11 }, { name: '6" BPE', od: 152.4, wall: 2.77 }] },
+            SMS: { color: '#2e7d32', appKey: "smsApp", data: [{ name: "SMS 25", od: 25.0, wall: 1.2 }, { name: "SMS 38", od: 38.0, wall: 1.2 }, { name: "SMS 51", od: 51.0, wall: 1.2 }, { name: "SMS 63.5", od: 63.5, wall: 1.6 }, { name: "SMS 76", od: 76.1, wall: 1.6 }, { name: "SMS 101", od: 101.6, wall: 2.0 }, { name: "SMS 104", od: 104.0, wall: 2.0 }] },
+            ISO: { color: '#9c27b0', appKey: "isoApp", data: [{ name: "ISO DN8 (13.5)", od: 13.5, wall: 1.6 }, { name: "ISO DN10 (17.2)", od: 17.2, wall: 1.6 }, { name: "ISO DN15 (21.3)", od: 21.3, wall: 1.6 }, { name: "ISO DN20 (26.9)", od: 26.9, wall: 1.6 }, { name: "ISO DN25 (33.7)", od: 33.7, wall: 2.0 }, { name: "ISO DN32 (42.4)", od: 42.4, wall: 2.0 }, { name: "ISO DN40 (48.3)", od: 48.3, wall: 2.0 }, { name: "ISO DN50 (60.3)", od: 60.3, wall: 2.0 }, { name: "ISO DN65 (76.1)", od: 76.1, wall: 2.0 }, { name: "ISO DN80 (88.9)", od: 88.9, wall: 2.3 }, { name: "ISO DN100 (114.3)", od: 114.3, wall: 2.6 }] },
+            SCH: { color: '#455a64', appKey: "schApp", data: [{ name: '½" Sch 10S', od: 21.3, wall: 2.11 }, { name: '½" Sch 40S', od: 21.3, wall: 2.77 }, { name: '¾" Sch 10S', od: 26.7, wall: 2.11 }, { name: '¾" Sch 40S', od: 26.7, wall: 2.87 }, { name: '1" Sch 10S', od: 33.4, wall: 2.77 }, { name: '1" Sch 40S', od: 33.4, wall: 3.38 }, { name: '1½" Sch 10S', od: 48.3, wall: 2.77 }, { name: '1½" Sch 40S', od: 48.3, wall: 3.68 }, { name: '2" Sch 10S', od: 60.3, wall: 2.77 }, { name: '2" Sch 40S', od: 60.3, wall: 3.91 }, { name: '2½" Sch 10S', od: 73.0, wall: 3.05 }, { name: '2½" Sch 40S', od: 73.0, wall: 5.16 }, { name: '3" Sch 10S', od: 88.9, wall: 3.05 }, { name: '3" Sch 40S', od: 88.9, wall: 5.49 }, { name: '4" Sch 10S', od: 114.3, wall: 3.05 }, { name: '4" Sch 40S', od: 114.3, wall: 6.02 }] },
             CARB: { 
                 color: '#7f8c8d', appKey: "carbApp", data: [
-                    { name: '1" Sch 40 (Carbon)', od: 33.4, wall: 3.38 }, { name: '1½" Sch 40 (Carbon)', od: 48.3, wall: 3.68 },
-                    { name: '2" Sch 40 (Carbon)', od: 60.3, wall: 3.91 }, { name: '3" Sch 40 (Carbon)', od: 88.9, wall: 5.49 },
-                    { name: '4" Sch 40 (Carbon)', od: 114.3, wall: 6.02 }, { name: '1" Sch 80 (Carbon)', od: 33.4, wall: 4.55 }, 
-                    { name: '1½" Sch 80 (Carbon)', od: 48.3, wall: 5.08 }, { name: '2" Sch 80 (Carbon)', od: 60.3, wall: 5.54 },
-                    { name: '3" Sch 80 (Carbon)', od: 88.9, wall: 7.62 }, { name: '4" Sch 80 (Carbon)', od: 114.3, wall: 8.56 },
-                    { name: '4" Sch 160 (Carbon)', od: 114.3, wall: 13.49 }
+                    { name: '½" Sch 40 (CS)', od: 21.3, wall: 2.77 }, { name: '½" Sch 80 (CS)', od: 21.3, wall: 3.73 },
+                    { name: '¾" Sch 40 (CS)', od: 26.7, wall: 2.87 }, { name: '¾" Sch 80 (CS)', od: 26.7, wall: 3.91 },
+                    { name: '1" Sch 40 (CS)', od: 33.4, wall: 3.38 }, { name: '1" Sch 80 (CS)', od: 33.4, wall: 4.55 },
+                    { name: '1½" Sch 40 (CS)', od: 48.3, wall: 3.68 }, { name: '1½" Sch 80 (CS)', od: 48.3, wall: 5.08 },
+                    { name: '2" Sch 40 (CS)', od: 60.3, wall: 3.91 }, { name: '2" Sch 80 (CS)', od: 60.3, wall: 5.54 }, { name: '2" Sch 160 (CS)', od: 60.3, wall: 8.74 },
+                    { name: '3" Sch 40 (CS)', od: 88.9, wall: 5.49 }, { name: '3" Sch 80 (CS)', od: 88.9, wall: 7.62 }, { name: '3" Sch 160 (CS)', od: 88.9, wall: 11.13 },
+                    { name: '4" Sch 40 (CS)', od: 114.3, wall: 6.02 }, { name: '4" Sch 80 (CS)', od: 114.3, wall: 8.56 }, { name: '4" Sch 160 (CS)', od: 114.3, wall: 13.49 }
                 ] 
             }
         };
@@ -508,48 +619,34 @@
         let currentNormKey = 'DIN'; 
         let currentData = db.DIN.data;
         let currentLang = 'es'; 
-
         let fullPipingData = []; 
 
-
-        // --- LANGUAGE FUNCTIONS ---
         function setLanguage(lang) {
             currentLang = lang; 
             document.documentElement.lang = lang;
-
             document.querySelectorAll('.flag-icon').forEach(flag => flag.classList.remove('active'));
             document.getElementById(`flag-${lang}`).classList.add('active');
-
             document.querySelectorAll('[data-key]').forEach(element => {
                 const key = element.getAttribute('data-key');
                 if (translations[lang] && translations[lang][key]) {
                     element.textContent = translations[lang][key];
                 }
             });
-            
-            // Re-ejecuta para asegurar que los títulos de los botones de grupo se actualicen
             document.querySelector(`.group-tab[data-group-key="SANITARY"]`).textContent = translations[lang].sanitaryLabel;
             document.querySelector(`.group-tab[data-group-key="HEAVY"]`).textContent = translations[lang].heavyLabel;
 
-            // Vuelve a desplegar las normas y actualiza la descripción y el select
             const activeGroupTab = document.querySelector(`.group-tab[data-group-key="${currentGroupKey}"]`);
             if (activeGroupTab) {
-                // Si ya hay un grupo activo, lo re-establece para actualizar sub-botones y textos
                 setGroup(currentGroupKey, activeGroupTab);
             } else {
-                // Esto es para la carga inicial, cuando aún no hay un grupo activo
                 setGroup('SANITARY', document.querySelector('.group-tab[data-group-key="SANITARY"]'));
             }
-            
-            // Recargar resultados sugeridos si hay input
             const inputVal = document.getElementById('odHintInput').value;
             findClosestPipes(inputVal);
         }
 
-        // --- GROUP FUNCTIONS ---
         function setGroup(groupKey, element) {
             currentGroupKey = groupKey;
-            
             const groupInfo = groups[groupKey];
             const primaryColor = groupInfo.color;
 
@@ -591,36 +688,26 @@
             setTimeout(() => container.classList.add('visible'), 50);
         }
 
-        // --- NORM FUNCTIONS (Carga los datos reales) ---
         function setNorm(normKey, element) {
             currentNormKey = normKey;
             const normInfo = db[normKey];
             currentData = normInfo.data;
 
-            // 1. Actualiza pestaña de norma activa
             document.querySelectorAll('.norm-tab').forEach(t => t.classList.remove('active'));
             if (element) {
                 element.classList.add('active');
             }
 
-            // 2. Actualiza colores y descripción
             const primaryColor = `var(--${normKey.toLowerCase()}-color)`;
             document.documentElement.style.setProperty('--current-color', primaryColor);
 
-            const highlightBox = document.getElementById('idBox');
-            highlightBox.style.backgroundColor = primaryColor.replace('var(', '').replace(')', '') + '15';
-            
             document.getElementById('appDesc').innerHTML = translations[document.documentElement.lang][normInfo.appKey];
-            
-            // 3. Carga las medidas específicas
             populateSelect();
         }
 
-        // --- DATA FUNCTIONS ---
         function populateSelect() {
             const select = document.getElementById('pipeSelect');
             select.innerHTML = "";
-            
             currentData.forEach((pipe, index) => {
                 const opt = document.createElement('option');
                 opt.value = index;
@@ -647,28 +734,36 @@
             document.getElementById('thkVal').innerHTML = data.wall.toFixed(2) + '<span class="unit">mm</span>';
             document.getElementById('idVal').innerHTML = innerDiaVal + '<span class="unit">mm</span>';
 
-            // Visual Logic SVG
-            const maxRefRadius = 115 / 2;
-            const maxSvgRadius = 100;
-
-            let rOuterVisual = (data.od / 2) / maxRefRadius * maxSvgRadius;
-            let rInnerVisual = ((data.od - (data.wall * 2)) / 2) / maxRefRadius * maxSvgRadius;
-
-            if (rOuterVisual - rInnerVisual < 2 && rOuterVisual > 0) {
-                 rInnerVisual = Math.max(0, rOuterVisual - 2);
-            } else if (rOuterVisual === 0) { 
-                 rInnerVisual = 0;
-            }
+            // --- LÓGICA DE DIBUJO ESCALADO (ZOOM INTELIGENTE) ---
             
-            document.getElementById('svgOuterCircle').setAttribute('r', rOuterVisual);
+            // Definimos un radio fijo para el exterior. 
+            // Siempre será 85px en pantalla, sin importar si es 6mm o 100mm en la vida real.
+            const fixedVisualRadius = 85;
+
+            // Calculamos el ID real
+            const realID = data.od - (2 * data.wall);
+            
+            // Calculamos la proporción del agujero (Ratio)
+            const ratio = realID / data.od;
+
+            // El radio visual interno será proporcional a esa relación
+            let rInnerVisual = fixedVisualRadius * ratio;
+
+            // Seguridad: Si la pared es muy gruesa, aseguramos que el agujero no desaparezca del todo
+            // ni se vea tan fino que no quepan las flechas, aunque aquí siempre tendremos espacio exterior.
+            // Si quieres asegurar que se vea "algo" de hueco:
+            if (rInnerVisual < 10) rInnerVisual = 10; 
+
+            // Actualizamos los círculos
+            document.getElementById('svgOuterCircle').setAttribute('r', fixedVisualRadius);
             document.getElementById('svgInnerCircle').setAttribute('r', rInnerVisual);
 
+            // Ajustamos las líneas de cota al nuevo radio interno visual
             const idLine = document.getElementById('idLine');
             idLine.setAttribute('x1', -rInnerVisual);
             idLine.setAttribute('x2', rInnerVisual);
         }
 
-        // --- HINT FUNCTION ---
         function findClosestPipes(inputOD) {
             const targetOD = parseFloat(inputOD);
             const resultsContainer = document.getElementById('resultadosSugeridos');
@@ -679,23 +774,15 @@
                 return;
             }
 
-            // 1. Calcular la diferencia con cada tubería en la base de datos completa
             let results = fullPipingData
-                .map(pipe => ({
-                    ...pipe,
-                    diff: Math.abs(pipe.od - targetOD)
-                }))
-                // Excluir resultados con una diferencia mayor a 10 mm
+                .map(pipe => ({ ...pipe, diff: Math.abs(pipe.od - targetOD) }))
                 .filter(pipe => pipe.diff <= 10) 
-                // Ordenar por diferencia (el más pequeño primero)
                 .sort((a, b) => a.diff - b.diff);
 
-            // Tomar solo los 3 mejores resultados
             const top3 = results.slice(0, 3);
 
-            // 2. Construir la tabla HTML
             if (top3.length === 0) {
-                 resultsContainer.innerHTML = `<p style="text-align:center; color:#777; font-size:0.9rem; padding:10px;">${translations[lang]['noCloseMatches'] || 'No se encontraron coincidencias cercanas (±10 mm).'}</p>`;
+                 resultsContainer.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:0.8rem; padding:10px; margin:0;">${translations[lang]['noCloseMatches']}</p>`;
                  return;
             }
 
@@ -704,7 +791,7 @@
                     <thead>
                         <tr>
                             <th>${translations[lang].hintTableHeaderName}</th>
-                            <th>${translations[lang].hintTableHeaderOD}</th>
+                            <th>OD</th>
                             <th>${translations[lang].hintTableHeaderDiff}</th>
                         </tr>
                     </thead>
@@ -712,45 +799,32 @@
             `;
 
             top3.forEach(pipe => {
+                const normColor = `var(--${pipe.source.toLowerCase()}-color)`;
                 html += `
                     <tr>
-                        <td class="res-name">${pipe.name} (${pipe.source})</td>
-                        <td>${pipe.od.toFixed(2)}</td>
-                        <td class="res-diff">${pipe.diff.toFixed(2)}</td>
+                        <td class="res-name" style="color: ${normColor}">${pipe.name} <span style="font-size:0.7em; color:var(--text-muted);">(${pipe.source})</span></td>
+                        <td>${pipe.od.toFixed(1)}</td>
+                        <td class="res-diff">${pipe.diff.toFixed(1)}</td>
                     </tr>
                 `;
             });
 
-            html += `
-                    </tbody>
-                </table>
-            `;
-
+            html += `</tbody></table>`;
             resultsContainer.innerHTML = html;
         }
 
-
-        // --- INITIALIZATION ---
         function initializeFullPipingData() {
-            // Recopila todos los datos de tuberías en una sola lista, incluyendo su fuente (norma)
             fullPipingData = [];
             for (const normKey in db) {
                 db[normKey].data.forEach(pipe => {
-                    fullPipingData.push({
-                        ...pipe,
-                        source: normKey
-                    });
+                    fullPipingData.push({ ...pipe, source: normKey });
                 });
             }
         }
 
         window.onload = function() {
             initializeFullPipingData();
-            
-            // Inicializa el idioma (esto llama a setGroup/setNorm)
             setLanguage('es');
-
-            // Asegurar que el botón SANITARY se vea activo al inicio
             const sanitaryTab = document.querySelector('.group-tab[data-group-key="SANITARY"]');
             sanitaryTab.classList.add('active');
         };
