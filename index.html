@@ -33,7 +33,7 @@
             position: relative;
         }
 
-        /* --- FONDO PRINCIPAL DIFUMINADO --- */
+        /* --- FONDO PRINCIPAL --- */
         body::before {
             content: '';
             position: fixed; 
@@ -43,7 +43,6 @@
             height: 100%;
             z-index: -1; 
             
-            /* --- URL CORREGIDA AQUÍ --- */
             background: linear-gradient(rgba(5, 5, 5, 0.85), rgba(10, 10, 10, 0.80)), 
                         url('https://raw.githubusercontent.com/marcosdespujoscelular-hash/despux/main/img1/head.png');
             
@@ -55,7 +54,7 @@
             transform: scale(1.02); 
         }
 
-        /* --- RESTO DEL CSS (Idéntico) --- */
+        /* --- HEADER Y NAVEGACIÓN --- */
         header {
             padding: 20px 40px;
             display: flex;
@@ -81,6 +80,91 @@
             color: var(--primary);
         }
 
+        /* ESTILOS DEL MENÚ DESPLEGABLE (NUEVO) */
+        nav {
+            position: relative;
+        }
+
+        details {
+            position: relative;
+        }
+
+        /* Estilo de la palabra "HERRAMIENTAS" */
+        summary {
+            list-style: none; /* Oculta triángulo default en Firefox */
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            padding: 10px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Oculta triángulo default en Chrome/Safari */
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        /* Efecto hover en el texto del menú */
+        summary:hover {
+            color: var(--primary);
+        }
+
+        /* Flechita decorativa hecha con CSS */
+        summary::after {
+            content: '▾';
+            font-size: 0.8em;
+        }
+
+        /* La caja que se despliega */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background-color: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            min-width: 220px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 5px 0;
+            z-index: 200;
+            
+            /* Animación simple de aparición */
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Enlaces dentro del desplegable */
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-left-color: var(--primary);
+        }
+
+        /* Cierra el menú si se hace click fuera (truco opcional, 
+           pero el comportamiento default de details es manual) */
+
+        /* --- HERO SECTION --- */
         .hero {
             flex: 1;
             display: flex;
@@ -109,29 +193,10 @@
             text-shadow: 0 1px 5px rgba(0,0,0,0.5);
         }
 
-        .btn-cta {
-            padding: 18px 40px;
-            background: rgba(10, 10, 10, 0.5); 
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
-        }
+        /* (Nota: He eliminado la clase .btn-cta del CSS porque ya no se usa en el hero, 
+           pero puedes dejarla si planeas reusarla en el futuro) */
 
-        .btn-cta:hover {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 0 30px var(--primary-glow);
-        }
-
+        /* --- CONTACT SECTION --- */
         .contact-section {
             background-color: var(--bg-surface); 
             padding: 60px 40px;
@@ -201,6 +266,7 @@
             opacity: 0.9;
         }
 
+        /* --- FOOTER --- */
         footer {
             padding: 30px 40px;
             text-align: center;
@@ -218,11 +284,13 @@
             font-style: italic;
         }
 
+        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
-            .btn-cta { width: 100%; text-align: center; }
             .btn-submit { width: 100%; }
+            /* Ajuste para que el menú no se salga en móviles */
+            .dropdown-menu { right: auto; left: 50%; transform: translateX(-50%); }
         }
     </style>
 </head>
@@ -230,18 +298,24 @@
 
     <header>
         <div class="brand">DESPUX <span>INGENIERÍA</span></div>
+        
+        <nav>
+            <details>
+                <summary>HERRAMIENTAS</summary>
+                <div class="dropdown-menu">
+                    <a href="/tuberia/">Calculadora de Tuberías</a>
+                    </div>
+            </details>
+        </nav>
     </header>
 
     <section class="hero">
         <h1>Herramientas de cálculo <br>para entornos industriales.</h1>
         <p>
-            Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas para tuberías y estándares internacionales.
+            Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas para tuberías y estándares internacionales desde el menú superior.
         </p>
         
-        <a href="/tuberia/" class="btn-cta">
-            Iniciar Calculadora
-        </a>
-    </section>
+        </section>
 
     <section class="contact-section">
         <div class="contact-wrapper">
@@ -270,6 +344,3 @@
 
 </body>
 </html>
-
-
-
