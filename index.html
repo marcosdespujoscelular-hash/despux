@@ -27,11 +27,9 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             line-height: 1.6;
-            display: flex;
-            flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden; /* Vital para el efecto slider */
             position: relative;
-            overflow-x: hidden;
         }
 
         /* --- FONDO IMAGEN ESTÁTICA --- */
@@ -73,6 +71,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            width: 100%;
         }
 
         .header-left {
@@ -86,6 +85,8 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--text-main);
+            cursor: pointer;
+            text-decoration: none;
         }
 
         .brand span {
@@ -139,13 +140,16 @@
         /* Navegación */
         nav {
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         details {
             position: relative;
         }
 
-        summary {
+        summary, .nav-btn {
             list-style: none;
             cursor: pointer;
             font-weight: 600;
@@ -157,11 +161,15 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 1rem;
         }
 
         summary::-webkit-details-marker { display: none; }
 
-        summary:hover { color: var(--primary); }
+        summary:hover, .nav-btn:hover, .nav-btn.active-link { color: var(--primary); }
 
         summary::after {
             content: '▾';
@@ -205,7 +213,27 @@
             border-left-color: var(--primary);
         }
 
-        /* --- HERO SECTION --- */
+        /* --- LOGICA DEL SLIDER PRINCIPAL --- */
+        #main-container {
+            display: flex;
+            width: 200vw; /* Dos pantallas de ancho */
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); /* Efecto slide suave */
+            will-change: transform;
+        }
+
+        .view-slide {
+            width: 50%; /* Cada slide ocupa el 100% de la ventana (100vw relativo al body) */
+            min-height: calc(100vh - 85px); /* Resto de pantalla menos header */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Clase para activar el deslizamiento */
+        body.show-works #main-container {
+            transform: translateX(-50%);
+        }
+
+        /* --- HERO SECTION (VIEW 1) --- */
         .hero {
             flex: 1;
             display: flex;
@@ -236,7 +264,7 @@
             text-shadow: 0 1px 5px rgba(0,0,0,0.5);
         }
 
-        /* --- CONTACT SECTION --- */
+        /* --- CONTACT SECTION (VIEW 1) --- */
         .contact-section {
             background-color: var(--bg-surface); 
             padding: 60px 40px;
@@ -303,6 +331,120 @@
             transform: scale(1.02);
         }
 
+        /* --- WORKS / PORTFOLIO SECTION (VIEW 2) --- */
+        .works-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            max-width: 1000px;
+            animation: slideInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* Retraso de animación para que se vea bien con el slide */
+        body.show-works .project-card {
+            animation-delay: 0.3s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            background-color: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Para ver la imagen completa */
+            background-color: #1a1a1a; /* Fondo si la imagen no llena */
+            transition: transform 0.5s;
+        }
+
+        .project-image:hover img {
+            transform: scale(1.03);
+        }
+
+        .project-info {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .project-tag {
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .project-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .project-desc {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tech-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: white;
+        }
+
+        .btn-project {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            border: 1px solid var(--primary);
+            padding: 10px 25px;
+            text-align: center;
+            border-radius: 4px;
+            transition: all 0.3s;
+            align-self: flex-start;
+        }
+
+        .btn-project:hover {
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
         /* --- FOOTER --- */
         footer {
             padding: 30px 40px;
@@ -311,8 +453,6 @@
             color: #555;
             background-color: #050505;
             border-top: 1px solid #111;
-            position: relative;
-            z-index: 2;
         }
 
         .author-sig {
@@ -330,17 +470,22 @@
             .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
             .btn-submit { width: 100%; }
             .dropdown-menu { right: auto; left: 50%; transform: translateX(-50%); }
+            
+            /* Ajustes Mobile Slide */
+            .project-card { grid-template-columns: 1fr; }
+            .project-image { min-height: 250px; }
+            .project-info { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Canvas para la animación de fondo -->
+    <!-- Canvas para la animación de fondo (Se mantiene fijo) -->
     <canvas id="canvas-network"></canvas>
 
     <header>
         <div class="header-left">
-            <div class="brand">DESPUX <span>ENGINEERING</span></div>
+            <a href="#" onclick="goHome(event)" class="brand">DESPUX <span>ENGINEERING</span></a>
         </div>
         
         <div class="header-right">
@@ -351,6 +496,11 @@
                         <a href="/tuberia/" data-i18n="nav_calc">Calculadora de Tuberías</a>
                     </div>
                 </details>
+
+                <!-- BOTÓN NUEVO DE TRABAJOS -->
+                <button class="nav-btn" id="btn-works" onclick="goWorks()" data-i18n="nav_works">
+                    TRABAJOS
+                </button>
             </nav>
 
             <!-- Selector de Idiomas -->
@@ -368,37 +518,78 @@
         </div>
     </header>
 
-    <section class="hero">
-        <h1 data-i18n="hero_title">Proyectos de Ingeniería <br>página Web en construcción.</h1>
-        <p data-i18n="hero_desc">
-            Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas desde el menú superior.
-        </p>
-    </section>
+    <!-- Contenedor Deslizante Global -->
+    <div id="main-container">
 
-    <section class="contact-section">
-        <div class="contact-wrapper">
-            <div class="contact-info">
-                <h3 data-i18n="contact_title">Contacto Directo</h3>
-                <p data-i18n="contact_desc">
-                    ¿Tiene alguna consulta técnica, sugerencia sobre nuestras herramientas o requiere asistencia personalizada? 
-                    Utilice el formulario para enviar un mensaje directo a nuestra administración.
+        <!-- VISTA 1: INICIO (HOME) -->
+        <div class="view-slide" id="view-home">
+            <section class="hero">
+                <h1 data-i18n="hero_title">Proyectos de Ingeniería <br>página Web en construcción.</h1>
+                <p data-i18n="hero_desc">
+                    Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas desde el menú superior.
                 </p>
-            </div>
+            </section>
 
-            <div class="form-box">
-                <form action="TU_ENDPOINT_DE_FORMULARIO" method="POST">
-                    <input type="email" name="email" data-i18n-placeholder="input_email" placeholder="Su Correo Electrónico" required>
-                    <textarea name="message" rows="4" data-i18n-placeholder="input_msg" placeholder="Escriba su mensaje..." required></textarea>
-                    <button type="submit" class="btn-submit" data-i18n="btn_send">ENVIAR</button>
-                </form>
-            </div>
+            <section class="contact-section">
+                <div class="contact-wrapper">
+                    <div class="contact-info">
+                        <h3 data-i18n="contact_title">Contacto Directo</h3>
+                        <p data-i18n="contact_desc">
+                            ¿Tiene alguna consulta técnica, sugerencia sobre nuestras herramientas o requiere asistencia personalizada? 
+                            Utilice el formulario para enviar un mensaje directo a nuestra administración.
+                        </p>
+                    </div>
+
+                    <div class="form-box">
+                        <form action="TU_ENDPOINT_DE_FORMULARIO" method="POST">
+                            <input type="email" name="email" data-i18n-placeholder="input_email" placeholder="Su Correo Electrónico" required>
+                            <textarea name="message" rows="4" data-i18n-placeholder="input_msg" placeholder="Escriba su mensaje..." required></textarea>
+                            <button type="submit" class="btn-submit" data-i18n="btn_send">ENVIAR</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <div data-i18n="footer_rights">&copy; 2024 DESPUX. Todos los derechos reservados.</div>
+                <div class="author-sig" data-i18n="footer_dev">Desarrollado y mantenido por Marcos Despujos.</div>
+            </footer>
         </div>
-    </section>
 
-    <footer>
-        <div data-i18n="footer_rights">&copy; 2024 DESPUX. Todos los derechos reservados.</div>
-        <div class="author-sig" data-i18n="footer_dev">Desarrollado y mantenido por Marcos Despujos.</div>
-    </footer>
+        <!-- VISTA 2: TRABAJOS (PORTAFOLIO) -->
+        <div class="view-slide" id="view-works">
+            <div class="works-wrapper">
+                <article class="project-card">
+                    <div class="project-image">
+                        <!-- Usamos el enlace RAW para asegurar que la imagen cargue correctamente -->
+                        <img src="https://raw.githubusercontent.com/marcosdespujoscelular-hash/despux/main/img1/PROY.png" 
+                             alt="Diagrama de Proyecto" 
+                             onerror="this.style.display='none'; this.parentNode.style.backgroundColor='#333';">
+                    </div>
+                    <div class="project-info">
+                        <span class="project-tag" data-i18n="work_tag">INGENIERÍA ESTRUCTURAL</span>
+                        <h2 class="project-title" data-i18n="work_title">Análisis de Integridad Estructural</h2>
+                        <p class="project-desc" data-i18n="work_desc">
+                            Implementación de algoritmos avanzados para el cálculo de resistencia de materiales en infraestructuras críticas. 
+                            Este proyecto utiliza modelado 3D y simulaciones de estrés en tiempo real para predecir puntos de fallo y optimizar el mantenimiento preventivo.
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">AutoCAD API</span>
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">TensorFlow</span>
+                        </div>
+                        <a href="#" class="btn-project" data-i18n="work_btn">VER DETALLES</a>
+                    </div>
+                </article>
+            </div>
+            
+            <footer>
+                <div data-i18n="footer_rights">&copy; 2024 DESPUX. Todos los derechos reservados.</div>
+            </footer>
+        </div>
+
+    </div>
 
     <!-- Script de Animación Canvas -->
     <script>
@@ -495,12 +686,26 @@
         animate();
     </script>
 
-    <!-- Script de Traducción -->
+    <!-- Script de Navegación y Traducción -->
     <script>
+        // --- NAVEGACIÓN ENTRE VISTAS ---
+        function goWorks() {
+            document.body.classList.add('show-works');
+            document.getElementById('btn-works').classList.add('active-link');
+        }
+
+        function goHome(e) {
+            if(e) e.preventDefault();
+            document.body.classList.remove('show-works');
+            document.getElementById('btn-works').classList.remove('active-link');
+        }
+
+        // --- TRADUCCIÓN ---
         const translations = {
             es: {
                 nav_tools: "HERRAMIENTAS",
                 nav_calc: "Calculadora de Tuberías",
+                nav_works: "TRABAJOS",
                 hero_title: "Proyectos de Ingeniería <br>página Web en construcción.",
                 hero_desc: "Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas desde el menú superior.",
                 contact_title: "Contacto Directo",
@@ -509,11 +714,17 @@
                 input_msg: "Escriba su mensaje...",
                 btn_send: "ENVIAR",
                 footer_rights: "&copy; 2024 DESPUX. Todos los derechos reservados.",
-                footer_dev: "Desarrollado y mantenido por Marcos Despujos."
+                footer_dev: "Desarrollado y mantenido por Marcos Despujos.",
+                // New Works Section
+                work_tag: "INGENIERÍA ESTRUCTURAL",
+                work_title: "Análisis de Integridad Estructural",
+                work_desc: "Implementación de algoritmos avanzados para el cálculo de resistencia de materiales en infraestructuras críticas. Este proyecto utiliza modelado 3D y simulaciones de estrés en tiempo real para predecir puntos de fallo y optimizar el mantenimiento preventivo.",
+                work_btn: "VER DETALLES"
             },
             en: {
                 nav_tools: "TOOLS",
                 nav_calc: "Pipe Calculator",
+                nav_works: "PROJECTS",
                 hero_title: "Engineering Projects <br>Website Under Construction.",
                 hero_desc: "We simplify technical processes with precision. Access our suite of tools from the top menu.",
                 contact_title: "Direct Contact",
@@ -522,11 +733,17 @@
                 input_msg: "Write your message...",
                 btn_send: "SEND",
                 footer_rights: "&copy; 2024 DESPUX. All rights reserved.",
-                footer_dev: "Developed and maintained by Marcos Despujos."
+                footer_dev: "Developed and maintained by Marcos Despujos.",
+                // New Works Section
+                work_tag: "STRUCTURAL ENGINEERING",
+                work_title: "Structural Integrity Analysis",
+                work_desc: "Implementation of advanced algorithms for calculating material resistance in critical infrastructure. This project uses 3D modeling and real-time stress simulations to predict failure points and optimize preventive maintenance.",
+                work_btn: "VIEW DETAILS"
             },
             de: {
                 nav_tools: "WERKZEUGE",
                 nav_calc: "Rohrrechner",
+                nav_works: "PROJEKTE",
                 hero_title: "Ingenieurprojekte <br>Webseite im Aufbau.",
                 hero_desc: "Wir vereinfachen technische Prozesse mit Präzision. Greifen Sie über das obere Menü auf unsere Tool-Suite zu.",
                 contact_title: "Direkter Kontakt",
@@ -535,7 +752,12 @@
                 input_msg: "Schreiben Sie Ihre Nachricht...",
                 btn_send: "SENDEN",
                 footer_rights: "&copy; 2024 DESPUX. Alle Rechte vorbehalten.",
-                footer_dev: "Entwickelt und gepflegt von Marcos Despujos."
+                footer_dev: "Entwickelt und gepflegt von Marcos Despujos.",
+                // New Works Section
+                work_tag: "BAUINGENIEURWESEN",
+                work_title: "Analyse der Strukturintegrität",
+                work_desc: "Implementierung fortschrittlicher Algorithmen zur Berechnung der Materialbeständigkeit in kritischen Infrastrukturen. Dieses Projekt nutzt 3D-Modellierung und Echtzeit-Belastungssimulationen, um Fehlerstellen vorherzusagen.",
+                work_btn: "DETAILS ANZEIGEN"
             }
         };
 
@@ -561,8 +783,6 @@
             // Actualizar estado visual de los botones
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
-                // Verificar si el botón clickeado contiene la imagen del idioma seleccionado
-                // Una forma simple es comparar el argumento onclick
                 if (btn.getAttribute('onclick').includes(lang)) {
                     btn.classList.add('active');
                 }
