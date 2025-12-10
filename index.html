@@ -31,10 +31,10 @@
             flex-direction: column;
             min-height: 100vh;
             position: relative;
-            overflow-x: hidden; /* Evita scroll horizontal accidental */
+            overflow-x: hidden;
         }
 
-        /* --- FONDO IMAGEN ESTÁTICA (CAPA MÁS PROFUNDA) --- */
+        /* --- FONDO IMAGEN ESTÁTICA --- */
         body::before {
             content: '';
             position: fixed; 
@@ -42,28 +42,23 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2; /* Nivel más bajo */
-            
+            z-index: -2;
             background: linear-gradient(rgba(5, 5, 5, 0.90), rgba(10, 10, 10, 0.85)), 
                         url('https://raw.githubusercontent.com/marcosdespujoscelular-hash/despux/main/img1/head.png');
-            
             background-size: cover; 
             background-position: center center;
             background-repeat: no-repeat;
-            
-            /* Eliminé el blur pesado para que se vea mejor con el canvas, 
-               pero mantengo la oscuridad para contraste */
         }
 
-        /* --- CANVAS ANIMADO (ENTRE FONDO Y CONTENIDO) --- */
+        /* --- CANVAS ANIMADO --- */
         #canvas-network {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Detrás del contenido, sobre el fondo */
-            pointer-events: none; /* CRUCIAL: Permite hacer click a través del canvas */
+            z-index: -1;
+            pointer-events: none;
         }
 
         /* --- HEADER Y NAVEGACIÓN --- */
@@ -80,6 +75,11 @@
             z-index: 100;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
         .brand {
             font-size: 1.5rem;
             font-weight: 800;
@@ -92,7 +92,51 @@
             color: var(--primary);
         }
 
-        /* ESTILOS DEL MENÚ DESPLEGABLE */
+        /* Contenedor derecho (Menú + Idiomas) */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Selector de Idiomas */
+        .lang-selector {
+            display: flex;
+            gap: 10px;
+            padding-left: 20px;
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .lang-btn {
+            background: none;
+            border: 2px solid transparent;
+            cursor: pointer;
+            padding: 0;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            overflow: hidden;
+            opacity: 0.6;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lang-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            opacity: 1;
+            border-color: var(--primary);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        /* Navegación */
         nav {
             position: relative;
         }
@@ -115,13 +159,9 @@
             gap: 5px;
         }
 
-        summary::-webkit-details-marker {
-            display: none;
-        }
+        summary::-webkit-details-marker { display: none; }
 
-        summary:hover {
-            color: var(--primary);
-        }
+        summary:hover { color: var(--primary); }
 
         summary::after {
             content: '▾';
@@ -176,7 +216,7 @@
             padding: 80px 20px;
             background: transparent; 
             position: relative;
-            z-index: 1; /* Asegura que el texto esté sobre el canvas */
+            z-index: 1;
         }
 
         .hero h1 {
@@ -202,7 +242,7 @@
             padding: 60px 40px;
             border-top: 1px solid var(--border);
             position: relative;
-            z-index: 2; /* Sobre el canvas para que el formulario sea sólido */
+            z-index: 2;
         }
 
         .contact-wrapper {
@@ -283,6 +323,9 @@
 
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+            .header-right { flex-direction: column-reverse; width: 100%; gap: 15px; }
+            .lang-selector { padding-left: 0; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; width: 100%; justify-content: center;}
             .hero h1 { font-size: 2.5rem; }
             .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
             .btn-submit { width: 100%; }
@@ -296,21 +339,38 @@
     <canvas id="canvas-network"></canvas>
 
     <header>
-        <div class="brand">DESPUX <span>ENGINEERING</span></div>
+        <div class="header-left">
+            <div class="brand">DESPUX <span>ENGINEERING</span></div>
+        </div>
         
-        <nav>
-            <details>
-                <summary>HERRAMIENTAS</summary>
-                <div class="dropdown-menu">
-                    <a href="/tuberia/">Calculadora de Tuberías</a>
-                </div>
-            </details>
-        </nav>
+        <div class="header-right">
+            <nav>
+                <details>
+                    <summary data-i18n="nav_tools">HERRAMIENTAS</summary>
+                    <div class="dropdown-menu">
+                        <a href="/tuberia/" data-i18n="nav_calc">Calculadora de Tuberías</a>
+                    </div>
+                </details>
+            </nav>
+
+            <!-- Selector de Idiomas -->
+            <div class="lang-selector">
+                <button class="lang-btn active" onclick="setLanguage('es')" title="Español">
+                    <img src="https://flagcdn.com/w40/es.png" alt="Español">
+                </button>
+                <button class="lang-btn" onclick="setLanguage('en')" title="English">
+                    <img src="https://flagcdn.com/w40/gb.png" alt="English">
+                </button>
+                <button class="lang-btn" onclick="setLanguage('de')" title="Deutsch">
+                    <img src="https://flagcdn.com/w40/de.png" alt="Deutsch">
+                </button>
+            </div>
+        </div>
     </header>
 
     <section class="hero">
-        <h1>Proyectos de Ingeniería <br>página Web en construcción.</h1>
-        <p>
+        <h1 data-i18n="hero_title">Proyectos de Ingeniería <br>página Web en construcción.</h1>
+        <p data-i18n="hero_desc">
             Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas desde el menú superior.
         </p>
     </section>
@@ -318,8 +378,8 @@
     <section class="contact-section">
         <div class="contact-wrapper">
             <div class="contact-info">
-                <h3>Contacto Directo</h3>
-                <p>
+                <h3 data-i18n="contact_title">Contacto Directo</h3>
+                <p data-i18n="contact_desc">
                     ¿Tiene alguna consulta técnica, sugerencia sobre nuestras herramientas o requiere asistencia personalizada? 
                     Utilice el formulario para enviar un mensaje directo a nuestra administración.
                 </p>
@@ -327,82 +387,66 @@
 
             <div class="form-box">
                 <form action="TU_ENDPOINT_DE_FORMULARIO" method="POST">
-                    <input type="email" name="email" placeholder="Su Correo Electrónico" required>
-                    <textarea name="message" rows="4" placeholder="Escriba su mensaje..." required></textarea>
-                    <button type="submit" class="btn-submit">ENVIAR</button>
+                    <input type="email" name="email" data-i18n-placeholder="input_email" placeholder="Su Correo Electrónico" required>
+                    <textarea name="message" rows="4" data-i18n-placeholder="input_msg" placeholder="Escriba su mensaje..." required></textarea>
+                    <button type="submit" class="btn-submit" data-i18n="btn_send">ENVIAR</button>
                 </form>
             </div>
         </div>
     </section>
 
     <footer>
-        <div>&copy; 2024 DESPUX. Todos los derechos reservados.</div>
-        <div class="author-sig">Desarrollado y mantenido por Marcos Despujos.</div>
+        <div data-i18n="footer_rights">&copy; 2024 DESPUX. Todos los derechos reservados.</div>
+        <div class="author-sig" data-i18n="footer_dev">Desarrollado y mantenido por Marcos Despujos.</div>
     </footer>
 
     <!-- Script de Animación Canvas -->
     <script>
         const canvas = document.getElementById('canvas-network');
         const ctx = canvas.getContext('2d');
-
         let width, height;
         let particles = [];
-        
-        // Configuración de la animación
         const config = {
-            particleCount: 80, // Cantidad de puntos
-            connectionDistance: 150, // Distancia máxima para conectar líneas
-            mouseDistance: 200, // Radio de interacción del mouse
-            baseColor: 'rgba(59, 130, 246, ', // Color base (Azul corporativo)
+            particleCount: 80,
+            connectionDistance: 150,
+            mouseDistance: 200,
+            baseColor: 'rgba(59, 130, 246, ',
         };
-
-        // Objeto para rastrear el mouse
         const mouse = { x: null, y: null };
 
-        // Ajustar tamaño del canvas
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
         }
 
-        // Clase Partícula
         class Particle {
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5; // Velocidad X lenta
-                this.vy = (Math.random() - 0.5) * 0.5; // Velocidad Y lenta
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
                 this.size = Math.random() * 2 + 1;
             }
-
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-
-                // Rebotar en los bordes
                 if (this.x < 0 || this.x > width) this.vx *= -1;
                 if (this.y < 0 || this.y > height) this.vy *= -1;
-
-                // Interacción con el mouse
                 if (mouse.x != null) {
                     let dx = mouse.x - this.x;
                     let dy = mouse.y - this.y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
-
                     if (distance < config.mouseDistance) {
                         const forceDirectionX = dx / distance;
                         const forceDirectionY = dy / distance;
                         const force = (config.mouseDistance - distance) / config.mouseDistance;
                         const directionX = forceDirectionX * force * 0.6;
                         const directionY = forceDirectionY * force * 0.6;
-                        
-                        // Empujar suavemente lejos del mouse (o atraer si cambias el signo)
                         this.x -= directionX;
                         this.y -= directionY;
                     }
                 }
             }
-
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -411,33 +455,25 @@
             }
         }
 
-        // Inicializar partículas
         function init() {
             particles = [];
-            // Ajustar cantidad de partículas según tamaño de pantalla
             const count = window.innerWidth < 768 ? 40 : config.particleCount;
             for (let i = 0; i < count; i++) {
                 particles.push(new Particle());
             }
         }
 
-        // Bucle de animación
         function animate() {
             ctx.clearRect(0, 0, width, height);
-
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
                 particles[i].draw();
-
-                // Dibujar conexiones
                 for (let j = i; j < particles.length; j++) {
                     let dx = particles[i].x - particles[j].x;
                     let dy = particles[i].y - particles[j].y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
-
                     if (distance < config.connectionDistance) {
                         ctx.beginPath();
-                        // La opacidad depende de la distancia (más cerca = más visible)
                         let opacity = 1 - (distance / config.connectionDistance);
                         ctx.strokeStyle = config.baseColor + opacity * 0.2 + ')'; 
                         ctx.lineWidth = 1;
@@ -450,28 +486,88 @@
             requestAnimationFrame(animate);
         }
 
-        // Event Listeners
-        window.addEventListener('resize', () => {
-            resize();
-            init();
-        });
+        window.addEventListener('resize', () => { resize(); init(); });
+        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+        window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
 
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
-
-        // Limpiar mouse cuando sale de la pantalla
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        // Arranque
         resize();
         init();
         animate();
+    </script>
 
+    <!-- Script de Traducción -->
+    <script>
+        const translations = {
+            es: {
+                nav_tools: "HERRAMIENTAS",
+                nav_calc: "Calculadora de Tuberías",
+                hero_title: "Proyectos de Ingeniería <br>página Web en construcción.",
+                hero_desc: "Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas desde el menú superior.",
+                contact_title: "Contacto Directo",
+                contact_desc: "¿Tiene alguna consulta técnica, sugerencia sobre nuestras herramientas o requiere asistencia personalizada? Utilice el formulario para enviar un mensaje directo a nuestra administración.",
+                input_email: "Su Correo Electrónico",
+                input_msg: "Escriba su mensaje...",
+                btn_send: "ENVIAR",
+                footer_rights: "&copy; 2024 DESPUX. Todos los derechos reservados.",
+                footer_dev: "Desarrollado y mantenido por Marcos Despujos."
+            },
+            en: {
+                nav_tools: "TOOLS",
+                nav_calc: "Pipe Calculator",
+                hero_title: "Engineering Projects <br>Website Under Construction.",
+                hero_desc: "We simplify technical processes with precision. Access our suite of tools from the top menu.",
+                contact_title: "Direct Contact",
+                contact_desc: "Do you have a technical query, suggestion about our tools, or require personalized assistance? Use the form to send a direct message to our administration.",
+                input_email: "Your Email Address",
+                input_msg: "Write your message...",
+                btn_send: "SEND",
+                footer_rights: "&copy; 2024 DESPUX. All rights reserved.",
+                footer_dev: "Developed and maintained by Marcos Despujos."
+            },
+            de: {
+                nav_tools: "WERKZEUGE",
+                nav_calc: "Rohrrechner",
+                hero_title: "Ingenieurprojekte <br>Webseite im Aufbau.",
+                hero_desc: "Wir vereinfachen technische Prozesse mit Präzision. Greifen Sie über das obere Menü auf unsere Tool-Suite zu.",
+                contact_title: "Direkter Kontakt",
+                contact_desc: "Haben Sie eine technische Frage, einen Vorschlag zu unseren Tools oder benötigen Sie persönliche Unterstützung? Nutzen Sie das Formular, um eine direkte Nachricht an unsere Verwaltung.",
+                input_email: "Ihre E-Mail-Adresse",
+                input_msg: "Schreiben Sie Ihre Nachricht...",
+                btn_send: "SENDEN",
+                footer_rights: "&copy; 2024 DESPUX. Alle Rechte vorbehalten.",
+                footer_dev: "Entwickelt und gepflegt von Marcos Despujos."
+            }
+        };
+
+        function setLanguage(lang) {
+            // Actualizar textos normales
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Actualizar placeholders (inputs)
+            const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+            placeholders.forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            // Actualizar estado visual de los botones
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                // Verificar si el botón clickeado contiene la imagen del idioma seleccionado
+                // Una forma simple es comparar el argumento onclick
+                if (btn.getAttribute('onclick').includes(lang)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
     </script>
 </body>
 </html>
