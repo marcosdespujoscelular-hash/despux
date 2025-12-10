@@ -27,8 +27,12 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden; /* Vital para el efecto slider */
+            
+            /* --- AJUSTE CLAVE PARA SCROLL INDEPENDIENTE --- */
+            height: 100vh; /* Altura fija a la ventana */
+            overflow: hidden; /* Bloquea el scroll global */
+            display: flex;
+            flex-direction: column; /* Organiza Header arriba y Contenido abajo */
             position: relative;
         }
 
@@ -68,10 +72,11 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             background: rgba(10, 10, 10, 0.7); 
             backdrop-filter: blur(15px); 
-            position: sticky;
-            top: 0;
+            /* Cambiado de sticky a relative porque el body ya no scrollea */
+            position: relative; 
             z-index: 100;
             width: 100%;
+            flex-shrink: 0; /* Evita que el header se aplaste */
         }
 
         .header-left {
@@ -217,15 +222,21 @@
         #main-container {
             display: flex;
             width: 200vw; /* Dos pantallas de ancho */
-            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); /* Efecto slide suave */
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             will-change: transform;
+            flex: 1; /* Ocupa todo el espacio restante debajo del header */
+            height: 100%; /* Asegura que llene el alto disponible */
         }
 
         .view-slide {
-            width: 50%; /* Cada slide ocupa el 100% de la ventana (100vw relativo al body) */
-            min-height: calc(100vh - 85px); /* Resto de pantalla menos header */
+            width: 50%; /* Cada slide es el 100% de la pantalla visible */
+            height: 100%; /* Llenar el contenedor */
             display: flex;
             flex-direction: column;
+            
+            /* --- HABILITAR SCROLL INTERNO --- */
+            overflow-y: auto; /* Scroll solo si el contenido lo requiere */
+            overflow-x: hidden;
         }
 
         /* Clase para activar el deslizamiento */
@@ -235,7 +246,7 @@
 
         /* --- HERO SECTION (VIEW 1) --- */
         .hero {
-            flex: 1;
+            flex: 1; /* Empuja el contenido para centrarlo si hay espacio */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -245,6 +256,7 @@
             background: transparent; 
             position: relative;
             z-index: 1;
+            min-height: 60vh; /* Altura mínima para asegurar centrado */
         }
 
         .hero h1 {
@@ -338,8 +350,10 @@
             padding: 60px 40px;
             flex: 1;
             display: flex;
+            flex-direction: column; /* Apilar tarjetas verticalmente */
+            gap: 80px; /* Espacio generoso entre proyectos para invitar al scroll */
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; /* Empezar desde arriba */
         }
 
         .project-card {
@@ -352,16 +366,22 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             backdrop-filter: blur(5px);
             max-width: 1000px;
+            width: 100%;
+            /* Animación */
             animation: slideInUp 0.8s ease-out forwards;
             opacity: 0;
             transform: translateY(20px);
         }
 
-        /* Retraso de animación para que se vea bien con el slide */
         body.show-works .project-card {
             animation-delay: 0.3s;
             opacity: 1;
             transform: translateY(0);
+        }
+        
+        /* Retraso para la segunda tarjeta */
+        body.show-works .project-card:nth-child(2) {
+            animation-delay: 0.5s;
         }
 
         .project-image {
@@ -376,8 +396,8 @@
         .project-image img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Para ver la imagen completa */
-            background-color: #1a1a1a; /* Fondo si la imagen no llena */
+            object-fit: contain; 
+            background-color: #1a1a1a;
             transition: transform 0.5s;
         }
 
@@ -453,6 +473,7 @@
             color: #555;
             background-color: #050505;
             border-top: 1px solid #111;
+            margin-top: auto; /* Empuja el footer al final del contenedor */
         }
 
         .author-sig {
@@ -494,6 +515,7 @@
                     <summary data-i18n="nav_tools">HERRAMIENTAS</summary>
                     <div class="dropdown-menu">
                         <a href="/tuberia/" data-i18n="nav_calc">Calculadora de Tuberías</a>
+                        <a href="https://www.despux.net/gear" data-i18n="nav_gears">Cálculo de Engranaje</a>
                     </div>
                 </details>
 
@@ -559,9 +581,10 @@
         <!-- VISTA 2: TRABAJOS (PORTAFOLIO) -->
         <div class="view-slide" id="view-works">
             <div class="works-wrapper">
+                
+                <!-- PROYECTO 1 -->
                 <article class="project-card">
                     <div class="project-image">
-                        <!-- Usamos el enlace RAW para asegurar que la imagen cargue correctamente -->
                         <img src="https://raw.githubusercontent.com/marcosdespujoscelular-hash/despux/main/img1/PROY.png" 
                              alt="Diagrama de Proyecto" 
                              onerror="this.style.display='none'; this.parentNode.style.backgroundColor='#333';">
@@ -582,6 +605,30 @@
                         <a href="#" class="btn-project" data-i18n="work_btn">VER DETALLES</a>
                     </div>
                 </article>
+
+                <!-- PROYECTO 2 (NUEVO) -->
+                <article class="project-card">
+                    <div class="project-image">
+                        <img src="https://raw.githubusercontent.com/marcosdespujoscelular-hash/despux/main/img1/ciclon.png" 
+                             alt="Ciclón Separador" 
+                             onerror="this.style.display='none'; this.parentNode.style.backgroundColor='#333';">
+                    </div>
+                    <div class="project-info">
+                        <span class="project-tag" data-i18n="work2_tag">DISEÑO MECÁNICO</span>
+                        <h2 class="project-title" data-i18n="work2_title">Ciclón Separador Inoxidable</h2>
+                        <p class="project-desc" data-i18n="work2_desc">
+                            Diseño y fabricación de un sistema de separación ciclónica en acero inoxidable para ambientes corrosivos. 
+                            Este módulo permite la filtración eficiente de partículas en suspensión para procesos industriales de alta pureza.
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-badge">SolidWorks</span>
+                            <span class="tech-badge">CFD Simulation</span>
+                            <span class="tech-badge">Inox 304L</span>
+                        </div>
+                        <a href="#" class="btn-project" data-i18n="work_btn">VER DETALLES</a>
+                    </div>
+                </article>
+
             </div>
             
             <footer>
@@ -705,6 +752,7 @@
             es: {
                 nav_tools: "HERRAMIENTAS",
                 nav_calc: "Calculadora de Tuberías",
+                nav_gears: "Cálculo de Engranaje",
                 nav_works: "TRABAJOS",
                 hero_title: "Proyectos de Ingeniería <br>página Web en construcción.",
                 hero_desc: "Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas desde el menú superior.",
@@ -715,15 +763,20 @@
                 btn_send: "ENVIAR",
                 footer_rights: "&copy; 2024 DESPUX. Todos los derechos reservados.",
                 footer_dev: "Desarrollado y mantenido por Marcos Despujos.",
-                // New Works Section
+                // Work 1
                 work_tag: "INGENIERÍA ESTRUCTURAL",
                 work_title: "Análisis de Integridad Estructural",
                 work_desc: "Implementación de algoritmos avanzados para el cálculo de resistencia de materiales en infraestructuras críticas. Este proyecto utiliza modelado 3D y simulaciones de estrés en tiempo real para predecir puntos de fallo y optimizar el mantenimiento preventivo.",
-                work_btn: "VER DETALLES"
+                work_btn: "VER DETALLES",
+                // Work 2 (Nuevo)
+                work2_tag: "DISEÑO MECÁNICO",
+                work2_title: "Ciclón Separador Inoxidable",
+                work2_desc: "Diseño y fabricación de un sistema de separación ciclónica en acero inoxidable para ambientes corrosivos. Este módulo permite la filtración eficiente de partículas en suspensión para procesos industriales de alta pureza."
             },
             en: {
                 nav_tools: "TOOLS",
                 nav_calc: "Pipe Calculator",
+                nav_gears: "Gear Calculation",
                 nav_works: "PROJECTS",
                 hero_title: "Engineering Projects <br>Website Under Construction.",
                 hero_desc: "We simplify technical processes with precision. Access our suite of tools from the top menu.",
@@ -734,15 +787,20 @@
                 btn_send: "SEND",
                 footer_rights: "&copy; 2024 DESPUX. All rights reserved.",
                 footer_dev: "Developed and maintained by Marcos Despujos.",
-                // New Works Section
+                // Work 1
                 work_tag: "STRUCTURAL ENGINEERING",
                 work_title: "Structural Integrity Analysis",
                 work_desc: "Implementation of advanced algorithms for calculating material resistance in critical infrastructure. This project uses 3D modeling and real-time stress simulations to predict failure points and optimize preventive maintenance.",
-                work_btn: "VIEW DETAILS"
+                work_btn: "VIEW DETAILS",
+                // Work 2 (Nuevo)
+                work2_tag: "MECHANICAL DESIGN",
+                work2_title: "Stainless Cyclone Separator",
+                work2_desc: "Design and manufacture of a stainless steel cyclonic separation system for corrosive environments. This module enables efficient filtration of suspended particles for high-purity industrial processes."
             },
             de: {
                 nav_tools: "WERKZEUGE",
                 nav_calc: "Rohrrechner",
+                nav_gears: "Zahnradberechnung",
                 nav_works: "PROJEKTE",
                 hero_title: "Ingenieurprojekte <br>Webseite im Aufbau.",
                 hero_desc: "Wir vereinfachen technische Prozesse mit Präzision. Greifen Sie über das obere Menü auf unsere Tool-Suite zu.",
@@ -753,11 +811,15 @@
                 btn_send: "SENDEN",
                 footer_rights: "&copy; 2024 DESPUX. Alle Rechte vorbehalten.",
                 footer_dev: "Entwickelt und gepflegt von Marcos Despujos.",
-                // New Works Section
+                // Work 1
                 work_tag: "BAUINGENIEURWESEN",
                 work_title: "Analyse der Strukturintegrität",
                 work_desc: "Implementierung fortschrittlicher Algorithmen zur Berechnung der Materialbeständigkeit in kritischen Infrastrukturen. Dieses Projekt nutzt 3D-Modellierung und Echtzeit-Belastungssimulationen, um Fehlerstellen vorherzusagen.",
-                work_btn: "DETAILS ANZEIGEN"
+                work_btn: "DETAILS ANZEIGEN",
+                // Work 2 (Nuevo)
+                work2_tag: "MECHANISCHES DESIGN",
+                work2_title: "Edelstahl-Zyklonabscheider",
+                work2_desc: "Konstruktion und Fertigung eines Zyklonabscheidesystems aus Edelstahl für korrosive Umgebungen. Dieses Modul ermöglicht die effiziente Filtration von Schwebeteilchen für hochreine industrielle Prozesse."
             }
         };
 
