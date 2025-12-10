@@ -8,7 +8,7 @@
     
     <style>
         :root {
-            /* --- COLORES DE NORMAS (Mantenidos) --- */
+            /* --- COLORES DE NORMAS --- */
             --sanitary-color: #0056b3;
             --heavy-color: #7f8c8d;
             --din-color: #3b82f6; 
@@ -42,11 +42,11 @@
             padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Alineado arriba para escritorio */
+            align-items: flex-start;
             min-height: 100vh;
         }
 
-        /* --- CONTENEDOR PRINCIPAL RESPONSIVE --- */
+        /* --- CONTENEDOR PRINCIPAL --- */
         .main-wrapper {
             width: 100%;
             max-width: 450px; /* Default móvil */
@@ -59,7 +59,6 @@
             transition: max-width 0.4s ease;
         }
 
-        /* Barra de color superior */
         .top-accent {
             height: 4px;
             width: 100%;
@@ -67,7 +66,6 @@
             transition: background var(--transition-speed);
         }
 
-        /* Layout Grid para Escritorio */
         .app-layout {
             display: flex;
             flex-direction: column;
@@ -104,14 +102,14 @@
         }
         .flag-icon.active, .flag-icon:hover { opacity: 1; transform: scale(1.1); box-shadow: 0 0 8px rgba(255,255,255,0.2); }
 
-        /* PANELES INTERNOS */
+        /* PANELES */
         .control-panel, .visual-panel {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
 
-        /* TABS GRUPOS */
+        /* TABS */
         .group-toggle {
             display: flex;
             background: var(--bg-panel);
@@ -137,17 +135,15 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
-        /* TABS NORMAS (MODIFICADO) */
         .norms-scroll {
             display: flex;
             gap: 8px;
-            /* Se eliminó overflow-x: auto para evitar el corte */
-            flex-wrap: wrap; /* Permite que los botones bajen de línea si no caben */
+            flex-wrap: wrap; 
             padding-bottom: 8px;
         }
         
         .norm-chip {
-            padding: 8px 16px; /* Un poco más de padding vertical para facilitar el toque */
+            padding: 8px 16px; 
             background: var(--bg-panel);
             border: 1px solid var(--border-color);
             border-radius: 20px;
@@ -157,7 +153,7 @@
             white-space: nowrap;
             cursor: pointer;
             transition: all 0.2s;
-            flex-grow: 1; /* Para que ocupen el ancho disponible equitativamente */
+            flex-grow: 1; 
             text-align: center;
         }
         .norm-chip:hover { border-color: var(--text-muted); }
@@ -168,7 +164,6 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.2) inset;
         }
 
-        /* SELECTOR */
         select {
             width: 100%;
             padding: 12px 16px;
@@ -180,7 +175,7 @@
             font-weight: 500;
             outline: none;
             cursor: pointer;
-            appearance: none; /* Custom arrow ideally */
+            appearance: none; 
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
@@ -188,11 +183,11 @@
         }
         select:focus { border-color: var(--current-color); }
 
-        /* CANVAS CONTAINER */
+        /* CANVAS */
         .canvas-container {
             position: relative;
             width: 100%;
-            height: 240px;
+            height: 280px; /* Un poco más alto por defecto */
             background: var(--bg-panel);
             border-radius: 16px;
             border: 1px solid var(--border-color);
@@ -202,7 +197,11 @@
             overflow: hidden;
             box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
         }
-        canvas { z-index: 2; }
+        canvas { 
+            display: block; 
+            width: 100%; 
+            height: 100%; 
+        }
         
         /* DATA GRID */
         .specs-grid {
@@ -232,7 +231,7 @@
         .value { font-size: 1.4rem; font-weight: 700; color: var(--text-main); }
         .unit { font-size: 0.8rem; font-weight: 400; color: var(--text-muted); margin-left: 2px; }
 
-        /* SEARCH / HINTS */
+        /* SEARCH */
         .search-box {
             margin-top: auto;
             background: var(--bg-panel);
@@ -254,17 +253,12 @@
         }
         .hint-input:focus { border-color: var(--hint-color); outline: none; }
         
-        .results-table {
-            width: 100%;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            border-collapse: collapse;
-        }
+        .results-table { width: 100%; font-size: 0.8rem; margin-top: 10px; border-collapse: collapse; }
         .results-table td { padding: 6px; border-bottom: 1px solid var(--border-color); }
         .results-table td:last-child { text-align: right; font-weight: bold; color: var(--hint-color); }
         .results-table tr:last-child td { border-bottom: none; }
 
-        /* INFO & FOOTER */
+        /* FOOTER */
         .info-box {
             margin-top: 16px;
             font-size: 0.85rem;
@@ -296,34 +290,18 @@
         .btn-home:hover { background: var(--text-main); color: #000; }
         .dev-sig { font-size: 0.7rem; color: #555; margin-top: 10px; display: block; }
 
-        /* --- MEDIA QUERIES ESPECÍFICAS (Escritorio) --- */
+        /* --- DESKTOP --- */
         @media (min-width: 850px) {
-            .main-wrapper {
-                max-width: 950px; /* Aumentado de 900px a 950px */
-            }
-
+            .main-wrapper { max-width: 950px; }
             .app-layout {
                 display: grid;
-                /* CAMBIO CLAVE: minmax(0, 1fr) evita que la columna se expanda más allá del contenedor */
                 grid-template-columns: 320px minmax(0, 1fr); 
                 grid-template-rows: auto 1fr auto;
                 gap: 32px;
                 align-items: start;
             }
-
-            .header-section {
-                grid-column: 1 / -1; 
-                border-bottom: 1px solid var(--border-color);
-                padding-bottom: 20px;
-                margin-bottom: 0;
-            }
-
-            .control-panel {
-                grid-column: 1;
-                grid-row: 2;
-                gap: 24px;
-            }
-
+            .header-section { grid-column: 1 / -1; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 0; }
+            .control-panel { grid-column: 1; grid-row: 2; gap: 24px; }
             .visual-panel {
                 grid-column: 2;
                 grid-row: 2;
@@ -331,30 +309,18 @@
                 padding: 24px;
                 border-radius: 20px;
                 border: 1px solid var(--border-color);
-                min-width: 0; /* Asegura el comportamiento correcto de flex/grid */
+                min-width: 0; 
+                height: 100%; /* Llenar altura */
             }
-
             .canvas-container {
-                height: 350px; 
+                height: 400px; /* Más grande en desktop */
                 background: var(--bg-card); 
                 border: none;
             }
-
-            .specs-grid {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
+            .specs-grid { grid-template-columns: 1fr 1fr 1fr; }
             .spec-card.highlight { grid-column: span 1; }
-
-            .footer-section {
-                grid-column: 1 / -1;
-                grid-row: 3;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            .info-box {
-                margin-top: 0;
-            }
+            .footer-section { grid-column: 1 / -1; grid-row: 3; display: flex; justify-content: space-between; align-items: center; }
+            .info-box { margin-top: 0; }
         }
     </style>
 </head>
@@ -365,10 +331,9 @@
         
         <div class="app-layout">
             
-            <!-- HEADER -->
             <header class="header-section">
                 <a href="https://www.despux.net" class="brand-logo">
-                    DESPUX <span>ENGINEERING</span>
+                    DESPUX <span>INGENIERÍA</span>
                 </a>
                 <div class="lang-flags">
                     <img src="https://flagicons.lipis.dev/flags/4x3/es.svg" class="flag-icon active" id="flag-es" onclick="setLanguage('es')">
@@ -377,16 +342,13 @@
                 </div>
             </header>
 
-            <!-- CONTROLES (Izquierda en Desktop) -->
             <div class="control-panel">
                 <div class="group-toggle">
                     <div class="group-btn active" onclick="setGroup('SANITARY', this)" data-group-key="SANITARY" data-key="sanitaryLabel">Inox Sanitario</div>
                     <div class="group-btn" onclick="setGroup('HEAVY', this)" data-group-key="HEAVY" data-key="heavyLabel">Industria Pesada</div>
                 </div>
 
-                <div class="norms-scroll" id="normTabsContainer">
-                    <!-- Se llena con JS -->
-                </div>
+                <div class="norms-scroll" id="normTabsContainer"></div>
 
                 <select id="pipeSelect" onchange="updateData()"></select>
 
@@ -396,14 +358,12 @@
                     <div id="resultadosSugeridos"></div>
                 </div>
                 
-                <!-- Solo visible en desktop layout izquierdo -->
                 <div class="info-box mobile-hidden">
                     <div class="label" data-key="appUsesTitle">Aplicaciones</div>
                     <span id="appDescSide">--</span>
                 </div>
             </div>
 
-            <!-- VISUALIZACIÓN (Derecha en Desktop) -->
             <div class="visual-panel">
                 <div class="canvas-container" id="canvasWrapper">
                     <canvas id="pipeCanvas"></canvas>
@@ -425,17 +385,15 @@
                 </div>
             </div>
 
-            <!-- FOOTER -->
             <footer class="footer-section">
                 <a href="https://www.despux.net" class="btn-home">← GO HOME</a>
-                <span class="dev-sig">Master de Tuberías v9.0 | Dev: Marcos Despujos</span>
+                <span class="dev-sig">Master de Tuberías v9.2 | Dev: Marcos Despujos</span>
             </footer>
 
         </div>
     </div>
 
     <script>
-        // --- 1. DATOS Y TRADUCCIONES (Mantenidos) ---
         const translations = {
             es: {
                 appTitle: "Guía Técnica Tuberías | DESPUX", appUsesTitle: "Usos y Aplicaciones:", odLabel: "Diámetro Ext (OD)", wallLabel: "Pared", idLabel: "Diámetro Interior", hintLabel: "Buscar por OD (mm)", hintTableHeaderName: "Tubería", hintTableHeaderDiff: "Dif.", sanitaryLabel: "Sanitario / Alimentario", heavyLabel: "Industria Pesada / Gas", DIN: "DIN 11850", ASTM: "ASME BPE", SMS: "SMS 3008", ISO: "ISO 1127", SCH: "ASTM A312 (Sch)", CARB: "Carbono (Sch)", noCloseMatches: "Sin coincidencias",
@@ -480,184 +438,153 @@
             HEAVY: { color: 'var(--heavy-color)', labelKey: 'heavyLabel', normKeys: ['SCH', 'CARB'] }
         };
 
-        // --- 2. ESTADO GLOBAL ---
-        let state = {
-            group: 'SANITARY',
-            norm: 'DIN',
-            lang: 'es',
-            data: db.DIN.data,
-            fullList: []
-        };
+        let state = { group: 'SANITARY', norm: 'DIN', lang: 'es', data: db.DIN.data, fullList: [] };
 
-        // --- 3. LÓGICA DE DIBUJO (CANVAS) ---
+        // --- LÓGICA DE DIBUJO ROBUSTA ---
         const canvas = document.getElementById('pipeCanvas');
+        const canvasContainer = document.getElementById('canvasWrapper');
         const ctx = canvas.getContext('2d');
-        let animationFrameId;
 
-        // Ajustar canvas al contenedor responsive
-        function resizeCanvas() {
-            const container = document.getElementById('canvasWrapper');
+        // Usamos ResizeObserver para detectar cambios REALES en el contenedor
+        const resizeObserver = new ResizeObserver(entries => {
+            // Cuando el contenedor cambia de tamaño, redimensionamos el canvas
+            fitCanvasToContainer();
+        });
+
+        function fitCanvasToContainer() {
+            // Obtenemos tamaño físico del contenedor
+            const rect = canvasContainer.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
-            canvas.width = container.clientWidth * dpr;
-            canvas.height = container.clientHeight * dpr;
+
+            // Evitamos dibujar si no hay espacio
+            if (rect.width === 0 || rect.height === 0) return;
+
+            // Ajustamos el tamaño interno del canvas (resolución)
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+
+            // Reseteamos cualquier transformación previa y aplicamos la escala DPI
+            ctx.resetTransform();
             ctx.scale(dpr, dpr);
-            // Redibujar si hay datos
-            updateData(); 
+
+            updateData(); // Redibujar
         }
-        window.addEventListener('resize', resizeCanvas);
+
+        // Activamos el observador
+        resizeObserver.observe(canvasContainer);
 
         function drawPipe(od, wall, colorHex) {
-            const w = canvas.width / (window.devicePixelRatio || 1);
-            const h = canvas.height / (window.devicePixelRatio || 1);
+            // Dimensiones lógicas (CSS pixels)
+            const rect = canvasContainer.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
             const cx = w / 2;
             const cy = h / 2;
 
-            // Limpiar
+            // Limpiamos todo (usando un rectángulo grande para asegurar)
             ctx.clearRect(0, 0, w, h);
 
-            // Cálculos de Radio Visual
-            // El círculo exterior siempre tendrá un tamaño consistente visualmente (ej. 40% del ancho menor)
-            // para que se aprecie bien tanto en móvil como desktop.
-            const maxRadius = Math.min(w, h) * 0.4;
+            // CÁLCULO DE ESCALA "ZOOM-TO-FIT"
+            // Factor 0.42 = 84% del ancho/alto mínimo. Deja un margen seguro pero se ve grande.
+            const fitFactor = 0.42; 
+            const maxRadius = Math.min(w, h) * fitFactor; 
+            
+            // Relación geométrica real
             const realID = od - (2 * wall);
             const ratio = realID / od;
             const innerRadius = maxRadius * ratio;
 
-            // 1. DIBUJAR CUERPO DEL TUBO (Metal Face)
-            // Usamos un gradiente cónico o lineal para simular metal
+            // 1. Cuerpo del Tubo
             const gradient = ctx.createLinearGradient(cx - maxRadius, cy - maxRadius, cx + maxRadius, cy + maxRadius);
-            gradient.addColorStop(0, '#333');
-            gradient.addColorStop(0.25, '#666');
-            gradient.addColorStop(0.5, '#eee'); // Brillo especular
-            gradient.addColorStop(0.75, '#666');
-            gradient.addColorStop(1, '#222');
+            gradient.addColorStop(0, '#222');
+            gradient.addColorStop(0.2, '#555');
+            gradient.addColorStop(0.5, '#eee'); // Brillo metálico
+            gradient.addColorStop(0.8, '#555');
+            gradient.addColorStop(1, '#111');
 
             ctx.beginPath();
             ctx.arc(cx, cy, maxRadius, 0, Math.PI * 2);
             ctx.fillStyle = gradient;
             ctx.fill();
-            ctx.strokeStyle = '#111';
+            ctx.strokeStyle = '#000';
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            // 2. DIBUJAR EL AGUJERO (Hueco)
-            // Fondo oscuro para simular profundidad
+            // 2. Agujero
             ctx.beginPath();
             ctx.arc(cx, cy, innerRadius, 0, Math.PI * 2);
-            ctx.fillStyle = '#0a0a0a'; // Color de fondo de la app (transparente fake)
+            ctx.fillStyle = '#121212'; // Color de fondo del card
             ctx.fill();
-            
-            // Sombra interior sutil
             ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // 3. COTAS Y FLECHAS (Dimensión ID)
-            // Dibujamos una linea horizontal en el centro
-            const arrowSize = 6;
-            const textPadding = 10;
+            // 3. Cotas (Solo si cabe)
             const lineColor = document.documentElement.style.getPropertyValue('--current-color').trim() || '#fff';
-
             ctx.strokeStyle = lineColor;
             ctx.fillStyle = lineColor;
             ctx.lineWidth = 1.5;
-            ctx.font = 'bold 12px Inter, sans-serif';
+            ctx.font = 'bold 13px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
 
-            // Si el agujero es muy pequeño, dibujamos flechas por fuera
-            if (innerRadius > 20) {
-                // Flechas internas
+            // Dibujar línea ID solo si el agujero es lo suficientemente grande ( > 25px radio)
+            if (innerRadius > 25) {
                 ctx.beginPath();
-                ctx.moveTo(cx - innerRadius + 2, cy);
-                ctx.lineTo(cx + innerRadius - 2, cy);
+                ctx.moveTo(cx - innerRadius + 4, cy);
+                ctx.lineTo(cx + innerRadius - 4, cy);
                 ctx.stroke();
 
-                // Puntas
-                drawArrowHead(ctx, cx - innerRadius + 2, cy, 'left');
-                drawArrowHead(ctx, cx + innerRadius - 2, cy, 'right');
+                // Flechas
+                drawArrowHead(ctx, cx - innerRadius + 4, cy, 'left');
+                drawArrowHead(ctx, cx + innerRadius - 4, cy, 'right');
 
-                // Texto "ID"
-                ctx.fillText("ID", cx, cy - 4);
-            } else {
-                // Flechas externas apuntando hacia adentro (si es muy chico)
-                // Por simplicidad en este demo, solo dibujamos linea tenue
-                ctx.globalAlpha = 0.5;
-                ctx.beginPath();
-                ctx.moveTo(cx - maxRadius, cy);
-                ctx.lineTo(cx + maxRadius, cy);
-                ctx.stroke();
-                ctx.globalAlpha = 1.0;
+                // Texto
+                ctx.fillText("ID", cx, cy - 5);
             }
         }
 
         function drawArrowHead(ctx, x, y, direction) {
             ctx.beginPath();
             if (direction === 'left') {
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 6, y - 3);
-                ctx.lineTo(x + 6, y + 3);
+                ctx.moveTo(x, y); ctx.lineTo(x + 6, y - 3); ctx.lineTo(x + 6, y + 3);
             } else {
-                ctx.moveTo(x, y);
-                ctx.lineTo(x - 6, y - 3);
-                ctx.lineTo(x - 6, y + 3);
+                ctx.moveTo(x, y); ctx.lineTo(x - 6, y - 3); ctx.lineTo(x - 6, y + 3);
             }
             ctx.fill();
         }
 
-
-        // --- 4. LÓGICA DE LA APP ---
-        
+        // --- APP LOGIC ---
         function setLanguage(lang) {
             state.lang = lang;
             document.querySelectorAll('.flag-icon').forEach(f => f.classList.remove('active'));
             document.getElementById(`flag-${lang}`).classList.add('active');
-
-            // Traducir textos estáticos
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
                 if (translations[lang][key]) el.innerHTML = translations[lang][key];
             });
-
-            // Actualizar Tabs de grupo
             document.querySelector('[data-group-key="SANITARY"]').textContent = translations[lang].sanitaryLabel;
             document.querySelector('[data-group-key="HEAVY"]').textContent = translations[lang].heavyLabel;
-
-            // Refrescar tabs de normas y descripción
             displayNormTabs(state.group);
             updateAppDescription();
         }
 
         function setGroup(groupKey, btnElement) {
             state.group = groupKey;
-            
-            // UI Toggle
             document.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
-
-            // Set Colors
-            const root = document.documentElement;
-            const newColor = groups[groupKey].color;
-            // No cambiamos --current-color directamente al del grupo, 
-            // sino que esperaremos a seleccionar la primera norma para tomar su color específico
-            
-            // Cargar Normas
             displayNormTabs(groupKey);
-            
-            // Seleccionar primera norma por defecto
-            const firstNorm = groups[groupKey].normKeys[0];
-            setNorm(firstNorm);
+            setNorm(groups[groupKey].normKeys[0]);
         }
 
         function displayNormTabs(groupKey) {
             const container = document.getElementById('normTabsContainer');
             container.innerHTML = '';
-            
             groups[groupKey].normKeys.forEach(key => {
                 const chip = document.createElement('div');
                 chip.className = 'norm-chip';
                 if(state.norm === key) chip.classList.add('active');
-                chip.textContent = translations[state.lang][key]; // Nombre traducido
+                chip.textContent = translations[state.lang][key]; 
                 chip.onclick = () => setNorm(key);
                 container.appendChild(chip);
             });
@@ -667,60 +594,44 @@
             state.norm = normKey;
             state.data = db[normKey].data;
             
-            // Actualizar Chips UI
-            document.querySelectorAll('.norm-chip').forEach(c => c.classList.remove('active'));
-            // Encontrar el chip que corresponde (un poco hacky por texto, mejor re-render o index)
-            // Simplificación: re-render rápido de chips para asegurar estado "active" correcto
             const chips = document.getElementById('normTabsContainer').children;
             const idx = groups[state.group].normKeys.indexOf(normKey);
+            Array.from(chips).forEach(c => c.classList.remove('active'));
             if(chips[idx]) chips[idx].classList.add('active');
 
-            // Actualizar Colores Globales
             const normColor = db[normKey].color;
             document.documentElement.style.setProperty('--current-color', normColor);
 
-            // Descripción
             updateAppDescription();
-
-            // Poblar Select
             const select = document.getElementById('pipeSelect');
             select.innerHTML = '';
             state.data.forEach((pipe, i) => {
                 const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = pipe.name;
-                select.appendChild(opt);
+                opt.value = i; opt.textContent = pipe.name; select.appendChild(opt);
             });
-            
-            // Trigger update
             updateData();
         }
 
         function updateAppDescription() {
             const descKey = db[state.norm].appKey;
-            const text = translations[state.lang][descKey];
-            document.getElementById('appDescSide').innerHTML = text;
+            document.getElementById('appDescSide').innerHTML = translations[state.lang][descKey];
         }
 
         function updateData() {
             const select = document.getElementById('pipeSelect');
             const idx = select.value;
             if(!state.data[idx]) return;
-
             const pipe = state.data[idx];
             const realID = pipe.od - (2 * pipe.wall);
 
-            // Actualizar Textos
             document.getElementById('odVal').innerHTML = pipe.od.toFixed(2) + '<span class="unit">mm</span>';
             document.getElementById('thkVal').innerHTML = pipe.wall.toFixed(2) + '<span class="unit">mm</span>';
             document.getElementById('idVal').innerHTML = realID.toFixed(2) + '<span class="unit">mm</span>';
             document.getElementById('idVal').style.color = 'var(--current-color)';
 
-            // Dibujar Canvas
             drawPipe(pipe.od, pipe.wall, db[state.norm].color);
         }
 
-        // --- 5. LÓGICA DE BÚSQUEDA (HINTS) ---
         function initFullList() {
             state.fullList = [];
             Object.keys(db).forEach(key => {
@@ -733,50 +644,24 @@
         function findClosestPipes(val) {
             const num = parseFloat(val);
             const container = document.getElementById('resultadosSugeridos');
-            
-            if (isNaN(num) || !val) {
-                container.innerHTML = '';
-                return;
-            }
-
-            // Filtrar y ordenar
-            let results = state.fullList
-                .map(p => ({ ...p, diff: Math.abs(p.od - num) }))
-                .filter(p => p.diff < 10)
-                .sort((a,b) => a.diff - b.diff)
-                .slice(0, 3); // Top 3
-
-            if(results.length === 0) {
-                container.innerHTML = `<div style="padding:10px; text-align:center; color:#555; font-size:0.8rem;">${translations[state.lang].noCloseMatches}</div>`;
-                return;
-            }
-
+            if (isNaN(num) || !val) { container.innerHTML = ''; return; }
+            let results = state.fullList.map(p => ({ ...p, diff: Math.abs(p.od - num) })).filter(p => p.diff < 10).sort((a,b) => a.diff - b.diff).slice(0, 3);
+            if(results.length === 0) { container.innerHTML = `<div style="padding:10px; text-align:center; color:#555; font-size:0.8rem;">${translations[state.lang].noCloseMatches}</div>`; return; }
             let html = `<table class="results-table"><tbody>`;
             results.forEach(r => {
                 const color = db[r.source].color;
-                html += `
-                    <tr>
-                        <td>
-                            <span style="color:${color}; font-weight:bold;">${r.name}</span>
-                            <br><span style="font-size:0.7em; opacity:0.7;">${r.source}</span>
-                        </td>
-                        <td style="text-align:center;">${r.od}</td>
-                        <td>${r.diff.toFixed(1)}</td>
-                    </tr>
-                `;
+                html += `<tr><td><span style="color:${color}; font-weight:bold;">${r.name}</span><br><span style="font-size:0.7em; opacity:0.7;">${r.source}</span></td><td style="text-align:center;">${r.od}</td><td>${r.diff.toFixed(1)}</td></tr>`;
             });
             html += `</tbody></table>`;
             container.innerHTML = html;
         }
 
-        // --- INIT ---
         window.onload = () => {
             initFullList();
             setLanguage('es');
-            resizeCanvas(); // Init canvas size
-            setGroup('SANITARY', document.querySelector('.group-btn')); // Trigger initial load
+            // Inicializar con la primera opción
+            setGroup('SANITARY', document.querySelector('.group-btn'));
         };
-
     </script>
 </body>
 </html>
