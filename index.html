@@ -31,9 +31,10 @@
             flex-direction: column;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden; /* Evita scroll horizontal accidental */
         }
 
-        /* --- FONDO PRINCIPAL --- */
+        /* --- FONDO IMAGEN ESTÁTICA (CAPA MÁS PROFUNDA) --- */
         body::before {
             content: '';
             position: fixed; 
@@ -41,17 +42,28 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; 
+            z-index: -2; /* Nivel más bajo */
             
-            background: linear-gradient(rgba(5, 5, 5, 0.85), rgba(10, 10, 10, 0.80)), 
+            background: linear-gradient(rgba(5, 5, 5, 0.90), rgba(10, 10, 10, 0.85)), 
                         url('https://raw.githubusercontent.com/marcosdespujoscelular-hash/despux/main/img1/head.png');
             
             background-size: cover; 
             background-position: center center;
             background-repeat: no-repeat;
             
-            filter: blur(3px);
-            transform: scale(1.02); 
+            /* Eliminé el blur pesado para que se vea mejor con el canvas, 
+               pero mantengo la oscuridad para contraste */
+        }
+
+        /* --- CANVAS ANIMADO (ENTRE FONDO Y CONTENIDO) --- */
+        #canvas-network {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Detrás del contenido, sobre el fondo */
+            pointer-events: none; /* CRUCIAL: Permite hacer click a través del canvas */
         }
 
         /* --- HEADER Y NAVEGACIÓN --- */
@@ -80,7 +92,7 @@
             color: var(--primary);
         }
 
-        /* ESTILOS DEL MENÚ DESPLEGABLE (NUEVO) */
+        /* ESTILOS DEL MENÚ DESPLEGABLE */
         nav {
             position: relative;
         }
@@ -89,9 +101,8 @@
             position: relative;
         }
 
-        /* Estilo de la palabra "HERRAMIENTAS" */
         summary {
-            list-style: none; /* Oculta triángulo default en Firefox */
+            list-style: none;
             cursor: pointer;
             font-weight: 600;
             text-transform: uppercase;
@@ -104,23 +115,19 @@
             gap: 5px;
         }
 
-        /* Oculta triángulo default en Chrome/Safari */
         summary::-webkit-details-marker {
             display: none;
         }
 
-        /* Efecto hover en el texto del menú */
         summary:hover {
             color: var(--primary);
         }
 
-        /* Flechita decorativa hecha con CSS */
         summary::after {
             content: '▾';
             font-size: 0.8em;
         }
 
-        /* La caja que se despliega */
         .dropdown-menu {
             position: absolute;
             top: 100%;
@@ -134,8 +141,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             padding: 5px 0;
             z-index: 200;
-            
-            /* Animación simple de aparición */
             animation: fadeIn 0.2s ease-out;
         }
 
@@ -144,7 +149,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Enlaces dentro del desplegable */
         .dropdown-menu a {
             display: block;
             padding: 12px 20px;
@@ -161,9 +165,6 @@
             border-left-color: var(--primary);
         }
 
-        /* Cierra el menú si se hace click fuera (truco opcional, 
-           pero el comportamiento default de details es manual) */
-
         /* --- HERO SECTION --- */
         .hero {
             flex: 1;
@@ -174,6 +175,8 @@
             text-align: center;
             padding: 80px 20px;
             background: transparent; 
+            position: relative;
+            z-index: 1; /* Asegura que el texto esté sobre el canvas */
         }
 
         .hero h1 {
@@ -193,16 +196,13 @@
             text-shadow: 0 1px 5px rgba(0,0,0,0.5);
         }
 
-        /* (Nota: He eliminado la clase .btn-cta del CSS porque ya no se usa en el hero, 
-           pero puedes dejarla si planeas reusarla en el futuro) */
-
         /* --- CONTACT SECTION --- */
         .contact-section {
             background-color: var(--bg-surface); 
             padding: 60px 40px;
             border-top: 1px solid var(--border);
             position: relative;
-            z-index: 1; 
+            z-index: 2; /* Sobre el canvas para que el formulario sea sólido */
         }
 
         .contact-wrapper {
@@ -246,10 +246,6 @@
             border-color: var(--primary);
         }
 
-        input:invalid:not(:placeholder-shown), textarea:invalid:not(:placeholder-shown) {
-            border-color: #ef4444;
-        }
-
         .btn-submit {
             background: white;
             color: black;
@@ -259,11 +255,12 @@
             cursor: pointer;
             border-radius: 2px;
             align-self: flex-start;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s, transform 0.2s;
         }
 
         .btn-submit:hover {
             opacity: 0.9;
+            transform: scale(1.02);
         }
 
         /* --- FOOTER --- */
@@ -275,7 +272,7 @@
             background-color: #050505;
             border-top: 1px solid #111;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .author-sig {
@@ -289,12 +286,14 @@
             .hero h1 { font-size: 2.5rem; }
             .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
             .btn-submit { width: 100%; }
-            /* Ajuste para que el menú no se salga en móviles */
             .dropdown-menu { right: auto; left: 50%; transform: translateX(-50%); }
         }
     </style>
 </head>
 <body>
+
+    <!-- Canvas para la animación de fondo -->
+    <canvas id="canvas-network"></canvas>
 
     <header>
         <div class="brand">DESPUX <span>ENGINEERING</span></div>
@@ -304,7 +303,7 @@
                 <summary>HERRAMIENTAS</summary>
                 <div class="dropdown-menu">
                     <a href="/tuberia/">Calculadora de Tuberías</a>
-                    </div>
+                </div>
             </details>
         </nav>
     </header>
@@ -314,8 +313,7 @@
         <p>
             Simplificamos procesos técnicos con precisión. Acceda a nuestra suite de herramientas desde el menú superior.
         </p>
-        
-        </section>
+    </section>
 
     <section class="contact-section">
         <div class="contact-wrapper">
@@ -342,7 +340,138 @@
         <div class="author-sig">Desarrollado y mantenido por Marcos Despujos.</div>
     </footer>
 
+    <!-- Script de Animación Canvas -->
+    <script>
+        const canvas = document.getElementById('canvas-network');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+        
+        // Configuración de la animación
+        const config = {
+            particleCount: 80, // Cantidad de puntos
+            connectionDistance: 150, // Distancia máxima para conectar líneas
+            mouseDistance: 200, // Radio de interacción del mouse
+            baseColor: 'rgba(59, 130, 246, ', // Color base (Azul corporativo)
+        };
+
+        // Objeto para rastrear el mouse
+        const mouse = { x: null, y: null };
+
+        // Ajustar tamaño del canvas
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        // Clase Partícula
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; // Velocidad X lenta
+                this.vy = (Math.random() - 0.5) * 0.5; // Velocidad Y lenta
+                this.size = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Rebotar en los bordes
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Interacción con el mouse
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < config.mouseDistance) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (config.mouseDistance - distance) / config.mouseDistance;
+                        const directionX = forceDirectionX * force * 0.6;
+                        const directionY = forceDirectionY * force * 0.6;
+                        
+                        // Empujar suavemente lejos del mouse (o atraer si cambias el signo)
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = config.baseColor + '0.6)';
+                ctx.fill();
+            }
+        }
+
+        // Inicializar partículas
+        function init() {
+            particles = [];
+            // Ajustar cantidad de partículas según tamaño de pantalla
+            const count = window.innerWidth < 768 ? 40 : config.particleCount;
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Bucle de animación
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Dibujar conexiones
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < config.connectionDistance) {
+                        ctx.beginPath();
+                        // La opacidad depende de la distancia (más cerca = más visible)
+                        let opacity = 1 - (distance / config.connectionDistance);
+                        ctx.strokeStyle = config.baseColor + opacity * 0.2 + ')'; 
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Event Listeners
+        window.addEventListener('resize', () => {
+            resize();
+            init();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        // Limpiar mouse cuando sale de la pantalla
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Arranque
+        resize();
+        init();
+        animate();
+
+    </script>
 </body>
 </html>
-
-
