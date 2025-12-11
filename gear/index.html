@@ -193,26 +193,32 @@
                             </div>
                         </div>
 
-                        <!-- REVERSE PANEL -->
+                        <!-- REVERSE PANEL (De Method only) -->
                         <div id="panelReverse" class="hidden space-y-4 animate-fade-in">
-                            <div class="bg-[var(--accent-bg)] border border-[var(--brand-primary)] border-opacity-30 p-3 rounded text-[10px] text-[var(--brand-primary)] mb-2">
-                                <i class="fa-solid fa-wrench mr-1"></i> <span data-i18n="revInfo">Ingrese D. Exterior y Z para encontrar el Módulo.</span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="col-span-1">
-                                    <label class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase mb-1.5" data-i18n="outerDiaInput">D. Exterior (mm)</label>
-                                    <input type="number" id="inRevDe" value="90" step="0.1" class="input-tech w-full px-3 py-2 rounded font-mono font-medium border-l-2 border-l-[var(--brand-primary)]">
+                            
+                            <!-- Outer Diameter (De) Method -->
+                            <div class="bg-[var(--bg-input)] p-3 rounded-md border border-[var(--border-color)]">
+                                <h3 class="text-xs font-bold text-[var(--text-main)] uppercase tracking-wider mb-2" data-i18n="odMethodTitle">Diámetro Exterior ($D_e$)</h3>
+                                <p class="text-[10px] text-[var(--text-muted)] italic mb-3" data-i18n="revInfo">Se usa $D_e = M(Z + 2)$.</p>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="col-span-1">
+                                        <label class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase mb-1.5" data-i18n="outerDiaInput">D. Exterior (mm)</label>
+                                        <input type="number" id="inRevDe" value="90" step="0.1" class="input-tech w-full px-2 py-2 rounded font-mono font-medium border-l-2 border-l-[var(--brand-primary)]">
+                                    </div>
+                                    <div class="col-span-1">
+                                        <label class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase mb-1.5" data-i18n="teeth">Dientes Z</label>
+                                        <input type="number" id="inRevZ" value="28" step="1" class="input-tech w-full px-2 py-2 rounded font-mono font-medium">
+                                    </div>
                                 </div>
-                                <div class="col-span-1">
-                                    <label class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase mb-1.5" data-i18n="teeth">Dientes (Z)</label>
-                                    <input type="number" id="inRevZ" value="28" step="1" class="input-tech w-full px-3 py-2 rounded font-mono font-medium">
-                                </div>
-                            </div>
-                            <div class="p-3 bg-[var(--bg-input)] rounded border border-[var(--border-color)] mt-2">
-                                <span class="block text-[10px] text-[var(--text-muted)] uppercase mb-1" data-i18n="calcModule">Módulo Calculado</span>
-                                <div class="flex items-baseline gap-2">
-                                    <span id="outRevModule" class="block text-xl font-mono font-bold text-[var(--brand-primary)]">-</span>
-                                    <button onclick="applyReverseModule()" class="text-[10px] underline text-[var(--text-muted)] hover:text-[var(--text-main)]" data-i18n="apply">Aplicar</button>
+                                
+                                <!-- De-Method Output -->
+                                <div class="mt-4 p-3 bg-[var(--bg-panel)] rounded border border-[var(--border-color)] flex justify-between items-center">
+                                    <div>
+                                        <span class="block text-[10px] text-[var(--text-muted)] uppercase mb-0.5">Módulo $M_{De}$</span>
+                                        <span id="outRevModuleDe" class="block text-xl font-mono font-bold text-[var(--brand-primary)]">-</span>
+                                    </div>
+                                    <button onclick="applyReverseModule('de')" class="text-[10px] underline text-[var(--text-main)] px-2 py-1 rounded bg-[var(--brand-primary)] text-white hover:opacity-80 transition-opacity font-bold" data-i18n="applyDe">Aplicar M De</button>
                                 </div>
                             </div>
                         </div>
@@ -356,7 +362,7 @@
             </div>
         </main>
 
-        <!-- RIGHT PANEL: SHAFT CONFIGURATION -->
+        <!-- RIGHT PANEL: K-MEASUREMENT & SHAFT CONFIGURATION -->
         <aside class="w-64 bg-[var(--bg-panel)] border-l border-[var(--border-color)] flex flex-col shrink-0 z-20 shadow-lg">
             <div class="p-4 border-b border-[var(--border-color)] bg-[var(--bg-input)]">
                 <h3 class="text-xs font-bold text-[var(--text-main)] uppercase tracking-wider flex items-center gap-2">
@@ -366,6 +372,60 @@
             </div>
             
             <div class="p-5 flex-1 overflow-y-auto">
+
+                <!-- K-MEASUREMENT CALCULATOR MOVED HERE -->
+                <div id="kMethodContainer" class="mb-6 hidden">
+                    <div class="bg-[var(--bg-input)] p-3 rounded-md border border-[var(--border-color)]">
+                        <h3 class="text-xs font-bold text-[var(--text-main)] uppercase tracking-wider mb-2" data-i18n="kMethodTitle">Medida K con Vernier (20°)</h3>
+                        <!-- SVG Schema for K-Measurement -->
+                        <div id="kMethodSchema" class="w-full h-16 mb-4 flex items-center justify-center bg-[var(--bg-body)] rounded-md border border-[var(--border-color)] p-2">
+                            <svg viewBox="0 0 100 40" class="w-full h-full">
+                                <!-- Gear Profile -->
+                                <path d="M 5 30 Q 10 20, 15 30 L 17 30 Q 20 10, 25 30 L 27 30 Q 30 20, 35 30 L 37 30 Q 40 10, 45 30 L 47 30 Q 50 20, 55 30 L 57 30 Q 60 10, 65 30 L 67 30 Q 70 20, 75 30 L 77 30 Q 80 10, 85 30 L 87 30 Q 90 20, 95 30" 
+                                      stroke="var(--gear-stroke)" stroke-width="0.5" fill="var(--gear-fill)" transform="scale(1, 0.9) translate(0, 3)" />
+                                <path d="M 0 30 L 100 30" stroke="var(--gear-stroke)" stroke-width="0.5" fill="none" transform="scale(1, 0.9) translate(0, 3)" />
+                                
+                                <!-- K Measurement line -->
+                                <line x1="10" y1="36" x2="65" y2="36" stroke="var(--dim-line)" stroke-width="1.5" stroke-dasharray="3 1"/>
+                                <line x1="10" y1="34" x2="10" y2="38" stroke="var(--dim-line)" stroke-width="1.5"/>
+                                <line x1="65" y1="34" x2="65" y2="38" stroke="var(--dim-line)" stroke-width="1.5"/>
+                                <text x="37.5" y="39" class="text-[6px] fill-[var(--dim-line)] font-mono" text-anchor="middle">K</text>
+
+                                <!-- C/Y spaces indicator -->
+                                <text x="40" y="27" class="text-[5px] fill-[var(--text-muted)] font-mono" text-anchor="middle">Y=3</text>
+                            </svg>
+                        </div>
+                        
+                        <p class="text-[10px] text-[var(--text-muted)] italic mb-3" data-i18n="kWarning">Fórmula simplificada para $20^\circ$. K: Medida sobre Y espacios. N: Total de dientes.</p>
+                        
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="col-span-1">
+                                <label class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase mb-1.5" data-i18n="kMeasureInput">Medida K (mm)</label>
+                                <input type="number" id="inRevK" value="23.97" step="0.01" class="input-tech w-full px-2 py-2 rounded font-mono font-medium border-l-2 border-l-[var(--dim-line)]">
+                            </div>
+                            <div class="col-span-1">
+                                <label class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase mb-1.5" data-i18n="kSpaces">Espacios Y (C)</label>
+                                <input type="number" id="inRevY" value="3" step="1" min="1" class="input-tech w-full px-2 py-2 rounded font-mono font-medium">
+                            </div>
+                            <div class="col-span-1">
+                                <label class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase mb-1.5" data-i18n="teethKMethod">Dientes N</label>
+                                <input type="number" id="inRevZN" value="28" step="1" class="input-tech w-full px-2 py-2 rounded font-mono font-medium">
+                            </div>
+                        </div>
+
+                        <!-- K-Method Output -->
+                        <div class="mt-4 p-3 bg-[var(--bg-panel)] rounded border border-[var(--border-color)] flex justify-between items-center">
+                            <div>
+                                <span class="block text-[10px] text-[var(--text-muted)] uppercase mb-0.5">Módulo $M_K$</span>
+                                <span id="outRevModuleK" class="block text-xl font-mono font-bold text-[var(--dim-line)]">-</span>
+                            </div>
+                            <button onclick="applyReverseModule('k')" class="text-[10px] underline text-[var(--text-main)] px-2 py-1 rounded bg-[var(--brand-primary)] text-white hover:opacity-80 transition-opacity font-bold" data-i18n="applyK">Aplicar M K</button>
+                        </div>
+                    </div>
+                    <div class="h-px bg-[var(--border-color)] my-4"></div>
+                </div>
+                <!-- END K-MEASUREMENT CALCULATOR -->
+
                 <div class="mb-6">
                     <label class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase mb-2" data-i18n="shaftDia">Diámetro Eje (mm)</label>
                     <div class="relative">
@@ -409,10 +469,19 @@
                 geoConfig: "Configuración",
                 tabDesign: "Diseño",
                 tabReverse: "Ing. Inversa",
-                revInfo: "Calcular Módulo desde D. Exterior y Z",
+                // Updated strings for reverse panel
+                kMethodTitle: "Medida K con Vernier (20°)",
+                kMeasureInput: "Medida K (mm)",
+                kSpaces: "Espacios Y (C)",
+                kWarning: "Fórmula simplificada para $20^\circ$. K: Medida sobre Y espacios. N: Total de dientes.",
+                odMethodTitle: "Diámetro Exterior ($D_e$)",
+                teethKMethod: "Dientes N",
+                revInfo: "Se usa $D_e = M(Z + 2)$.",
                 outerDiaInput: "D. Exterior (Medido)",
-                calcModule: "Módulo Calculado",
+                calcModule: "Módulo Calculado (M)",
                 apply: "Usar este valor",
+                applyK: "Aplicar M K", // NEW
+                applyDe: "Aplicar M De", // NEW
                 spurGear: "Recto",
                 helicalGear: "Helicoidal",
                 module: "Módulo (m)",
@@ -454,10 +523,19 @@
                 geoConfig: "Settings",
                 tabDesign: "Design",
                 tabReverse: "Rev. Eng",
-                revInfo: "Calc Module from OD and Z",
+                // Updated strings for reverse panel
+                kMethodTitle: "K-Measurement (Vernier, 20°)",
+                kMeasureInput: "K Measurement (mm)",
+                kSpaces: "Spaces Y (C)",
+                kWarning: "Simplified formula for $20^\circ$. K: Measurement over Y spaces. N: Total teeth.",
+                odMethodTitle: "Outer Diameter ($D_e$)",
+                teethKMethod: "Teeth N",
+                revInfo: "Uses $D_e = M(Z + 2)$.",
                 outerDiaInput: "Outer Dia. (Measured)",
-                calcModule: "Calculated Module",
+                calcModule: "Calculated Module (M / DP)",
                 apply: "Use this value",
+                applyK: "Apply M K", // NEW
+                applyDe: "Apply M De", // NEW
                 spurGear: "Spur",
                 helicalGear: "Helical",
                 module: "Module (m)",
@@ -499,10 +577,19 @@
                 geoConfig: "Einstellungen",
                 tabDesign: "Design",
                 tabReverse: "Reverse Eng",
-                revInfo: "Modul aus Kopfkreis und Z",
+                // Updated strings for reverse panel
+                kMethodTitle: "K-Messung (Messschieber, 20°)",
+                kMeasureInput: "K-Maß (mm)",
+                kSpaces: "Lücken Y (C)",
+                kWarning: "Vereinfachte Formel für $20^\circ$. K: Messung über Y Lücken. N: Gesamtzähnezahl.",
+                odMethodTitle: "Kopfkreisdurchmesser ($D_e$)",
+                teethKMethod: "Zähnezahl N",
+                revInfo: "Verwendet $D_e = M(Z + 2)$.",
                 outerDiaInput: "Kopfkreis (Gemessen)",
-                calcModule: "Berechnetes Modul",
+                calcModule: "Berechnetes Modul (M / DP)",
                 apply: "Wert anwenden",
+                applyK: "M K Anwenden", // NEW
+                applyDe: "M De Anwenden", // NEW
                 spurGear: "Geradverzahnt",
                 helicalGear: "Schrägverzahnt",
                 module: "Modul (m)",
@@ -520,7 +607,7 @@
                 zVirtual: "Virtuelle Z:",
                 fabSpecs: "Fertigungsspezifikationen",
                 techReport: "Technischer Bericht",
-                param: "Parameter",
+                param: "Parámetro",
                 value: "Wert",
                 circularPitch: "Teilung",
                 toothThick: "Zahndicke",
@@ -607,9 +694,12 @@
                 system: document.getElementById('inSystem'),
                 helicalPanel: document.getElementById('helicalInputs'),
                 labelModule: document.getElementById('labelModule'),
+                // Reverse Engineering Inputs
                 revDe: document.getElementById('inRevDe'),
                 revZ: document.getElementById('inRevZ'),
-                outRevModule: document.getElementById('outRevModule'),
+                revK: document.getElementById('inRevK'), // K-Method K
+                revY: document.getElementById('inRevY'), // K-Method Y
+                revZN: document.getElementById('inRevZN'), // K-Method N/Z
                 panelDesign: document.getElementById('panelDesign'),
                 panelReverse: document.getElementById('panelReverse'),
                 shaftDia: document.getElementById('inShaftDia'),
@@ -652,6 +742,11 @@
                 outKeyT2: document.getElementById('outKeyT2'),
                 shaftWarning: document.getElementById('shaftWarning'),
                 labelStd: document.getElementById('labelStd'),
+                // NEW specific module outputs
+                outRevModuleK: document.getElementById('outRevModuleK'),
+                outRevModuleDe: document.getElementById('outRevModuleDe'),
+                // NEW K-Method container in right panel
+                kMethodContainer: document.getElementById('kMethodContainer'),
             },
             canvas: document.getElementById('mainCanvas')
         };
@@ -660,13 +755,18 @@
             mode: 'recto', 
             activeTab: 'design', 
             units: 'metric', 
-            val: 3, 
-            z: 28,
+            val: 3, // Module M (Used for design panel calculation)
+            z: 28, // Teeth Z
             beta: 15,
             factorH: 2.166,
             shaftD: 20,
             keySpec: { b: 6, h: 6, t2: 2.8 },
-            calc: { Dp: 0, De: 0, Dedendum: 0, H_total: 0, Di: 0 }
+            calc: { Dp: 0, De: 0, Dedendum: 0, H_total: 0, Di: 0 },
+            // NEW: Separate storage for calculated modules in reverse mode
+            mK: 0, 
+            mDe: 0,
+            zK: 0,
+            zDe: 0
         };
 
         // --- FUNCTIONS ---
@@ -696,11 +796,15 @@
                 ui.inputs.panelReverse.classList.add('hidden');
                 ui.buttons.tabDesign.classList.add('active');
                 ui.buttons.tabReverse.classList.remove('active');
+                ui.outputs.kMethodContainer.classList.add('hidden'); // HIDE K-METHOD in right panel
+                calculate(); // Calculate with current design values
             } else {
                 ui.inputs.panelDesign.classList.add('hidden');
                 ui.inputs.panelReverse.classList.remove('hidden');
                 ui.buttons.tabDesign.classList.remove('active');
                 ui.buttons.tabReverse.classList.add('active');
+                ui.outputs.kMethodContainer.classList.remove('hidden'); // SHOW K-METHOD in right panel
+                // When switching to reverse, trigger calculation
                 calculateReverse(); 
             }
         }
@@ -716,7 +820,12 @@
                 if (key === 'module' && state.units === 'imperial') {
                     el.textContent = i18n[lang]['dp'];
                 } else if (i18n[lang][key]) {
-                    el.textContent = i18n[lang][key];
+                    // Check if it's a warning with math to keep the LaTeX syntax
+                    if (key === 'kWarning' || key === 'odMethodTitle' || key === 'revInfo') {
+                        el.innerHTML = i18n[lang][key].replace(/\$/g, ''); // Remove $ for simplicity
+                    } else {
+                        el.textContent = i18n[lang][key];
+                    }
                 }
             });
             calculate(); 
@@ -732,6 +841,7 @@
                 ui.inputs.labelModule.setAttribute('data-i18n', 'module');
                 ui.inputs.labelModule.textContent = i18n[currentLang]['module'];
                 ui.inputs.revDe.previousElementSibling.textContent = i18n[currentLang]['outerDiaInput'] + " (mm)";
+                ui.inputs.revK.previousElementSibling.textContent = i18n[currentLang]['kMeasureInput'] + " (mm)";
                 ui.outputs.unitLabels.forEach(el => el.textContent = 'mm');
                 ui.outputs.labelStd.textContent = "Norma DIN 6885 (mm)";
                 
@@ -747,6 +857,7 @@
                 ui.inputs.labelModule.setAttribute('data-i18n', 'dp');
                 ui.inputs.labelModule.textContent = i18n[currentLang]['dp'];
                 ui.inputs.revDe.previousElementSibling.textContent = i18n[currentLang]['outerDiaInput'] + " (in)";
+                ui.inputs.revK.previousElementSibling.textContent = i18n[currentLang]['kMeasureInput'] + " (in)";
                 ui.outputs.unitLabels.forEach(el => el.textContent = 'in');
                 ui.outputs.labelStd.textContent = "Norma ANSI B17.1 (in)";
 
@@ -754,6 +865,7 @@
                 if (ui.inputs.module.value < 4) ui.inputs.module.value = 10;
                 ui.inputs.shaftDia.value = 1.0; // Default inch shaft
             }
+            // Recalculate everything, including reverse panel outputs
             calculate();
         }
 
@@ -801,114 +913,175 @@
         }
 
         function calculateReverse() {
-            if (state.activeTab !== 'reverse') return;
-            const de = parseFloat(ui.inputs.revDe.value) || 0;
-            const z = parseInt(ui.inputs.revZ.value) || 0;
+            // Only run if the reverse tab is active, but we can call it from `calculate()` 
+            // even if it's not active to ensure the state is always ready.
+
             const helixAngle = parseFloat(ui.inputs.angle.value) || 0;
             const helixRad = (helixAngle * Math.PI) / 180;
-            if (de <= 0 || z <= 0) return;
-            let calculatedVal = 0;
-            if (state.units === 'metric') {
-                if (state.mode === 'recto') calculatedVal = de / (z + 2);
-                else calculatedVal = de / ( (z / Math.cos(helixRad)) + 2 );
-            } else {
-                if (state.mode === 'recto') calculatedVal = (z + 2) / de;
-                else calculatedVal = ((z / Math.cos(helixRad)) + 2) / de;
+            const dec = state.units === 'metric' ? 4 : 4; 
+            
+            // --- 1. K-METHOD CALCULATION ---
+            const K = parseFloat(ui.inputs.revK.value) || 0;
+            const Y = parseInt(ui.inputs.revY.value) || 0;
+            const N = parseInt(ui.inputs.revZN.value) || 0;
+            let M_K_calc = 0;
+            let Z_K_calc = 0;
+            
+            if (K > 0 && Y >= 1 && N >= 1) {
+                // M = K / [ (2.952 * Y) + 1.476 + (0.014 * N) ] (Formula for 20 deg)
+                const F = (2.952 * Y) + 1.476 + (0.014 * N);
+                if (F > 0) {
+                    M_K_calc = K / F;
+                    Z_K_calc = N;
+                }
             }
-            ui.inputs.outRevModule.textContent = calculatedVal.toFixed(4);
-            state.val = calculatedVal;
-            state.z = z;
-            state.beta = helixAngle;
-            performCalculationValues();
+            state.mK = M_K_calc;
+            state.zK = Z_K_calc;
+
+            // --- 2. OUTER DIAMETER (De) METHOD CALCULATION ---
+            const de = parseFloat(ui.inputs.revDe.value) || 0;
+            const z = parseInt(ui.inputs.revZ.value) || 0;
+            let M_De_calc = 0;
+            let Z_De_calc = 0;
+            
+            if (de > 0 && z > 0) {
+                // M = De / (Z_virtual + 2)
+                let Z_virtual = z;
+                if (state.mode === 'helicoidal') {
+                    Z_virtual = z / Math.cos(helixRad); // Z_t = Z_n / cos(beta)
+                }
+                M_De_calc = de / (Z_virtual + 2);
+                Z_De_calc = z;
+            }
+            state.mDe = M_De_calc;
+            state.zDe = Z_De_calc;
+
+            // --- Update UI ---
+            let dispK = '-';
+            let dispDe = '-';
+
+            if (state.units === 'metric') {
+                if (M_K_calc > 0) dispK = M_K_calc.toFixed(dec);
+                if (M_De_calc > 0) dispDe = M_De_calc.toFixed(dec);
+            } else {
+                // Display DP (Diametral Pitch) = 1/M
+                if (M_K_calc > 0) dispK = (1 / M_K_calc).toFixed(dec);
+                if (M_De_calc > 0) dispDe = (1 / M_De_calc).toFixed(dec);
+            }
+
+            ui.outputs.outRevModuleK.textContent = dispK;
+            ui.outputs.outRevModuleDe.textContent = dispDe;
         }
 
-        function applyReverseModule() {
-            const val = parseFloat(ui.inputs.outRevModule.textContent);
-            if(!isNaN(val)) {
-                ui.inputs.module.value = val;
-                ui.inputs.teeth.value = ui.inputs.revZ.value;
-                switchTab('design');
-                calculate();
+        function applyReverseModule(method) {
+            let selectedM = 0;
+            let selectedZ = 0;
+
+            if (method === 'k' && state.mK > 0) {
+                selectedM = state.mK;
+                selectedZ = state.zK;
+            } else if (method === 'de' && state.mDe > 0) {
+                selectedM = state.mDe;
+                selectedZ = state.zDe;
+            } else {
+                // Should not happen if buttons are properly guarded
+                return;
             }
+
+            // state.val is always M (Module)
+            state.val = selectedM;
+            state.z = selectedZ;
+            
+            // If imperial, we need to convert M back to DP for the input field
+            const designVal = state.units === 'imperial' ? (1 / selectedM) : selectedM;
+
+            ui.inputs.module.value = designVal.toFixed(4);
+            ui.inputs.teeth.value = selectedZ;
+            
+            // Switch and recalculate the design tab
+            switchTab('design');
         }
 
         function calculate() {
             if (state.activeTab === 'reverse') {
                 calculateReverse();
-                return;
             }
-            state.val = parseFloat(ui.inputs.module.value) || 0;
+            // Design mode uses inputs directly
+            const inputVal = parseFloat(ui.inputs.module.value) || 0;
+            
+            if (state.units === 'metric') {
+                state.val = inputVal; // M = input
+            } else {
+                state.val = inputVal > 0 ? (1 / inputVal) : 0; // M = 1 / DP
+            }
+
             state.z = parseInt(ui.inputs.teeth.value) || 0;
             state.beta = parseFloat(ui.inputs.angle.value) || 0;
             state.factorH = parseFloat(ui.inputs.system.value);
             state.shaftD = parseFloat(ui.inputs.shaftDia.value) || 0;
+            
             performCalculationValues();
+            
+            // Ensure reverse outputs are calculated even if we're in design mode
+            if (state.activeTab !== 'reverse') {
+                calculateReverse();
+            }
         }
 
         function performCalculationValues() {
             if (state.val <= 0 || state.z <= 0) return;
             let Dp, De, H_total, Addendum, Dedendum, Pc, S, Lead;
+            let M_calc = state.val; // M_calc is always Module (M)
+            let Z_calc = state.z;
             let Z_virtual = state.z;
             let helixRad = (state.beta * Math.PI) / 180;
 
-            if (state.units === 'metric') {
-                let M = state.val;
-                let Mt = M; 
-                if (state.mode === 'helicoidal') {
-                    Mt = M / Math.cos(helixRad);
-                    Z_virtual = state.z / Math.pow(Math.cos(helixRad), 3);
-                }
-                Dp = Mt * state.z;
-                H_total = state.factorH * M; 
-                Addendum = M;
-                Dedendum = H_total - Addendum;
-                De = Dp + (2 * M);
-                Pc = Math.PI * Mt;
-                S = Pc / 2;
-                if (state.mode === 'helicoidal' && state.beta > 0) Lead = Math.PI * Dp * (1 / Math.tan(helixRad));
-                else Lead = 0;
-            } else {
-                let Pd = state.val; 
-                let Pdt = Pd; 
-                if (state.mode === 'helicoidal') {
-                    Pdt = Pd * Math.cos(helixRad); 
-                    Z_virtual = state.z / Math.pow(Math.cos(helixRad), 3);
-                }
-                Dp = state.z / Pdt;
-                Addendum = 1 / Pd;
-                H_total = state.factorH / Pd;
-                Dedendum = H_total - Addendum;
-                De = Dp + (2 / Pd); 
-                Pc = Math.PI / Pdt;
-                S = Pc / 2;
-                if (state.mode === 'helicoidal' && state.beta > 0) Lead = Math.PI * Dp * (1 / Math.tan(helixRad));
-                else Lead = 0;
+            // Determine transverse module (Mt)
+            let Mt = M_calc; 
+            if (state.mode === 'helicoidal') {
+                Mt = M_calc / Math.cos(helixRad);
+                Z_virtual = Z_calc / Math.pow(Math.cos(helixRad), 3);
             }
+            
+            // Calculations in metric (M) system first
+            Dp = Mt * Z_calc;
+            Addendum = M_calc;
+            H_total = state.factorH * M_calc; 
+            Dedendum = H_total - Addendum;
+            De = Dp + (2 * M_calc);
+            Pc = Math.PI * Mt;
+            S = Pc / 2;
 
+            if (state.mode === 'helicoidal' && state.beta > 0) Lead = Math.PI * Dp * (1 / Math.tan(helixRad));
+            else Lead = 0;
+            
             let Di = De - (2 * H_total);
             const keySpec = findKeywaySpec(state.shaftD);
             state.keySpec = keySpec;
             
+            // --- Unit Conversion for Display ---
             let dispB = keySpec.b;
             let dispH = keySpec.h;
             let dispT2 = keySpec.t2;
             let suffix = ' mm';
-            
+            let dec = 2;
+
             if (state.units === 'imperial') {
-                // Values are ALREADY in inches from the table
+                // If input was DP, M_calc=1/DP. Results are now in inches.
                 dispB = keySpec.b.toFixed(4);
                 dispH = keySpec.h.toFixed(4);
                 dispT2 = keySpec.t2.toFixed(3);
                 suffix = ' in';
+                dec = 4;
             }
-
+            
+            // Update Keyway UI
             ui.outputs.outKeyDim.textContent = `${dispB} x ${dispH} ${state.units === 'imperial' ? 'in' : ''}`;
             ui.outputs.outKeyT2.textContent = dispT2 + suffix;
 
+            // Shaft Warning Check
             const holeMaxRad = (state.shaftD / 2); 
-            let keywayMaxRad = holeMaxRad;
-            // Both tables (metric/imperial) now provide direct values in current unit system
-            keywayMaxRad += keySpec.t2; 
+            let keywayMaxRad = holeMaxRad + keySpec.t2; 
             
             const rootRad = Di / 2;
             if (keywayMaxRad >= rootRad * 0.9) ui.outputs.shaftWarning.classList.remove('hidden');
@@ -916,20 +1089,22 @@
 
             state.calc = { Dp, De, Dedendum, H_total, Addendum, Di };
 
+            // Cutter Calculation
             const cutter = getCutter(Z_virtual);
-            const turns = Math.floor(40 / state.z);
-            const remainder = (40 / state.z) - turns;
-            let indexingText = `40/${state.z}`;
+            
+            // Indexing Calculation (assuming 40:1)
+            const turns = Math.floor(40 / Z_calc);
+            const remainderFraction = (40 / Z_calc) - turns;
+            let indexingText = `40/${Z_calc}`;
             const txtTurns = { es: "vts", en: "turns", de: "Umdr" };
-            if (remainder === 0) indexingText = `${turns} ${txtTurns[currentLang]}`;
-            else indexingText = `${turns} + ${(remainder).toFixed(3)}`;
+            if (remainderFraction === 0) indexingText = `${turns} ${txtTurns[currentLang]}`;
+            else indexingText = `${turns} ${txtTurns[currentLang]} + ${(remainderFraction).toFixed(3)}`;
+            if (Z_calc === 0) indexingText = '-';
 
-            const dec = state.units === 'metric' ? 2 : 4; 
-            const unitSuffix = state.units === 'metric' ? ' mm' : ' in';
-
+            // Output Results
             ui.outputs.dp.textContent = Dp.toFixed(dec);
             ui.outputs.de.textContent = De.toFixed(dec);
-            ui.outputs.h.textContent = H_total.toFixed(dec + 1) + unitSuffix;
+            ui.outputs.h.textContent = H_total.toFixed(dec + 1) + suffix;
             ui.outputs.cutter.textContent = "#" + cutter.id;
             ui.outputs.range.textContent = cutter.desc; 
             ui.outputs.indexing.textContent = indexingText; 
@@ -941,9 +1116,12 @@
             ui.outputs.noteDepth.textContent = H_total.toFixed(dec+1);
 
             if (state.mode === 'helicoidal') {
-                ui.outputs.lead.textContent = Lead.toFixed(dec) + unitSuffix; 
+                ui.outputs.lead.textContent = Lead.toFixed(dec) + suffix; 
                 ui.outputs.noteAngle.textContent = state.beta;
                 ui.outputs.noteZv.textContent = Z_virtual.toFixed(1);
+                ui.outputs.helicalNote.classList.remove('hidden');
+            } else {
+                ui.outputs.helicalNote.classList.add('hidden');
             }
             drawGear(Dp, De, Di, state.z);
         }
@@ -978,9 +1156,6 @@
             let kwReal = state.keySpec.b;
             let t2Real = state.keySpec.t2;
 
-            // In new logic, keySpec is ALREADY in the correct unit system (mm or in)
-            // No need to divide by 25.4 manually. The 'scale' factor handles the visual conversion.
-
             const rShaft = rShaftReal * scale;
             const kw = kwReal * scale;
             const kh_into_hub = t2Real * scale;
@@ -1003,7 +1178,7 @@
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // Gear Profile
+            // Gear Profile (Simplified Involute Approximation)
             ctx.beginPath();
             ctx.fillStyle = colFill;
             ctx.lineWidth = 1.5;
@@ -1024,7 +1199,7 @@
                 ctx.arc(cx, cy, rI, a1, a2); 
                 ctx.lineTo(cx + Math.cos(a3) * rE, cy + Math.sin(a3) * rE);
                 ctx.arc(cx, cy, rE, a3, a4);
-                ctx.lineTo(cx + Math.cos(a5) * rI, cy + Math.sin(a5) * rI);
+                ctx.lineTo(cx + Math.cos(a5) * rE, cy + Math.sin(a5) * rE);
             }
             ctx.closePath();
             ctx.fill();
@@ -1039,49 +1214,53 @@
             ctx.fill();
             ctx.stroke();
 
-            // Keyway
-            ctx.beginPath();
-            ctx.fillStyle = style.getPropertyValue('--bg-body').trim();
-            ctx.rect(cx - kw/2, cy - rShaft - kh_into_hub, kw, kh_into_hub + 2); 
-            ctx.fill();
-            
-            // Keyway Border
-            ctx.beginPath();
-            ctx.lineWidth = 1.5;
-            ctx.strokeStyle = colStroke;
-            ctx.moveTo(cx - kw/2, cy - rShaft + 2);
-            ctx.lineTo(cx - kw/2, cy - rShaft - kh_into_hub);
-            ctx.lineTo(cx + kw/2, cy - rShaft - kh_into_hub);
-            ctx.lineTo(cx + kw/2, cy - rShaft + 2);
-            ctx.stroke();
+            // Keyway (at 12 o'clock)
+            if (rShaft > 0 && kw > 0 && kh_into_hub > 0) {
+                const cornerRadius = 2; // Aesthetic rounding for keyway
+                ctx.beginPath();
+                ctx.fillStyle = style.getPropertyValue('--bg-body').trim();
+                
+                const x = cx - kw / 2;
+                const y = cy - rShaft;
+                const width = kw;
+                const height = kh_into_hub;
+                const arcLength = 2; // Small vertical line before arc starts
+                
+                ctx.moveTo(x, y + arcLength);
+                ctx.lineTo(x, y - height + cornerRadius);
+                ctx.arcTo(x, y - height, x + cornerRadius, y - height, cornerRadius);
+                ctx.lineTo(x + width - cornerRadius, y - height);
+                ctx.arcTo(x + width, y - height, x + width, y - height + cornerRadius, cornerRadius);
+                ctx.lineTo(x + width, y + arcLength);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            }
         }
 
         function exportDXF() {
             if (state.calc.Dp === 0) return;
             const { Dp, De, Di } = state.calc;
             const Z = state.z;
-            const rP = Dp / 2;
             const rE = De / 2;
             const rI = Di / 2;
             let rShaft = state.shaftD / 2;
             let kw = state.keySpec.b;
             let t2 = state.keySpec.t2;
             
-            // No manual conversion needed as keyspec matches unit system now
-
             const nl = '\r\n';
             let dxf = `0${nl}SECTION${nl}2${nl}HEADER${nl}9${nl}$ACADVER${nl}1${nl}AC1009${nl}`;
             const unitsCode = state.units === 'metric' ? '4' : '1';
             dxf += `9${nl}$INSUNITS${nl}70${nl}${unitsCode}${nl}0${nl}ENDSEC${nl}`;
             dxf += `0${nl}SECTION${nl}2${nl}ENTITIES${nl}`;
 
+            // Gear Tooth Profile Approximation
             const step = (Math.PI * 2) / Z;
             for (let i = 0; i < Z; i++) {
                 const angle = i * step;
                 const halfPitch = step / 2;
-                const halfTooth = halfPitch / 2; 
-                const angRootHalf = halfTooth * 1.3; 
-                const angTipHalf = halfTooth * 0.7;
+                const angRootHalf = halfPitch * 1.3; 
+                const angTipHalf = halfPitch * 0.7;
                 const a1 = angle - halfPitch; 
                 const a2 = angle - angRootHalf; 
                 const a3 = angle - angTipHalf; 
@@ -1093,25 +1272,39 @@
                     if (d < 0) d += 360;
                     return d;
                 };
+                
+                // Root Arc (simplified)
                 dxf += dxfArc(0, 0, rI, toDeg(a1), toDeg(a2));
+                // Flank Line 1
                 dxf += dxfLine(Math.cos(a2)*rI, Math.sin(a2)*rI, Math.cos(a3)*rE, Math.sin(a3)*rE);
+                // Tip Arc
                 dxf += dxfArc(0, 0, rE, toDeg(a3), toDeg(a4));
+                // Flank Line 2
                 dxf += dxfLine(Math.cos(a4)*rE, Math.sin(a4)*rE, Math.cos(a5)*rI, Math.sin(a5)*rI);
+                // Root Arc 2
                 dxf += dxfArc(0, 0, rI, toDeg(a5), toDeg(a6));
             }
 
-            if (kw < rShaft * 2) {
+            // Shaft Hole and Keyway
+            if (rShaft > 0 && kw > 0 && t2 > 0) {
+                const t1 = t2; // Assuming t1=t2 for simple drawing
+                const keywayBottomY = rShaft - t1;
+                const keywayTopY = rShaft + t2;
+                
                 const intersectY = Math.sqrt(Math.max(0, rShaft*rShaft - (kw/2)*(kw/2)));
                 const angIntersect = Math.atan2(intersectY, kw/2); 
                 const toDeg = (rad) => (rad * 180 / Math.PI);
                 const startAng = toDeg(Math.PI - angIntersect); 
                 const endAng = toDeg(angIntersect); 
+
+                // Arc for the shaft hole (excluding keyway part)
                 dxf += dxfArc(0, 0, rShaft, startAng, endAng);
 
-                const topY = rShaft + t2;
-                dxf += dxfLine(kw/2, intersectY, kw/2, topY);
-                dxf += dxfLine(kw/2, topY, -kw/2, topY);
-                dxf += dxfLine(-kw/2, topY, -kw/2, intersectY);
+                // Lines for the keyway
+                dxf += dxfLine(kw/2, intersectY, kw/2, -keywayBottomY);
+                dxf += dxfLine(kw/2, -keywayBottomY, -kw/2, -keywayBottomY);
+                dxf += dxfLine(-kw/2, -keywayBottomY, -kw/2, intersectY);
+
             } else {
                  dxf += dxfCircle(0, 0, rShaft);
             }
@@ -1137,6 +1330,12 @@
             const nl = '\r\n';
             let s = angStart % 360; if (s < 0) s += 360;
             let e = angEnd % 360; if (e < 0) e += 360;
+            // Handle full circle by closing the arc start/end to avoid weird artifacts in DXF viewers
+            if (Math.abs(s - e) < 0.001) {
+                e = s + 360;
+            } else if (e < s) {
+                e += 360;
+            }
             return `0${nl}ARC${nl}8${nl}0${nl}10${nl}${cx.toFixed(6)}${nl}20${nl}${cy.toFixed(6)}${nl}30${nl}0.0${nl}40${nl}${r.toFixed(6)}${nl}50${nl}${s.toFixed(6)}${nl}51${nl}${e.toFixed(6)}${nl}`;
         }
         
@@ -1153,8 +1352,15 @@
         });
         ui.inputs.system.addEventListener('change', calculate);
         ui.inputs.shaftDia.addEventListener('input', calculate);
+        
+        // Listeners for De/Z Method
         ui.inputs.revDe.addEventListener('input', calculateReverse);
         ui.inputs.revZ.addEventListener('input', calculateReverse);
+        
+        // Listeners for K-Method
+        ui.inputs.revK.addEventListener('input', calculateReverse);
+        ui.inputs.revY.addEventListener('input', calculateReverse);
+        ui.inputs.revZN.addEventListener('input', calculateReverse);
 
         new ResizeObserver(calculate).observe(ui.canvas.parentElement);
         changeLang('es');
