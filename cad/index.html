@@ -38,7 +38,7 @@
         #ui-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            pointer-events: none; transition: opacity 0.5s; z-index: 10;
+            transition: opacity 0.5s; z-index: 10;
         }
         .card {
             background: rgba(30, 30, 30, 0.9);
@@ -46,6 +46,25 @@
             padding: 40px; border-radius: 8px;
             text-align: center; color: white;
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+        
+        /* --- BOTÓN DE CARGA (NUEVO) --- */
+        .upload-btn {
+            background: transparent;
+            border: 1px solid #00deff;
+            color: #00deff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.2s;
+            pointer-events: auto; /* Habilitar clicks */
+        }
+        .upload-btn:hover {
+            background: rgba(0, 222, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 222, 255, 0.3);
+            color: white;
         }
 
         /* --- BARRA DE HERRAMIENTAS --- */
@@ -104,7 +123,10 @@
     <div id="ui-layer">
         <div class="card">
             <h1 id="txt-welcome-title" style="margin:0; font-weight:300; font-size: 20px; color:#00deff;">VISOR TÉCNICO</h1>
-            <p id="txt-welcome-desc" style="color:#aaa; margin-top:10px; font-size: 14px;">Arrastra un archivo .STL aquí</p>
+            <p id="txt-welcome-desc" style="color:#aaa; margin:0; font-size: 14px;">Arrastra un archivo .STL aquí</p>
+            
+            <input type="file" id="file-input" accept=".stl" style="display: none;" />
+            <button id="btn-upload-trigger" class="upload-btn">SELECCIONAR ARCHIVO</button>
         </div>
     </div>
 
@@ -136,17 +158,20 @@
         var currentLang = 'en'; 
         const translations = {
             es: {
-                welcomeTitle: "VISOR TÉCNICO", welcomeDesc: "Arrastra un archivo .STL aquí",
+                welcomeTitle: "VISOR TÉCNICO", welcomeDesc: "Arrastra un archivo .STL aquí o...",
+                uploadBtn: "SELECCIONAR ARCHIVO",
                 toolDist: "Distancia (2 Pts)", toolDiam: "Diámetro (3 Pts)",
                 toolWire: "Estructura", toolClear: "Borrar", labelDist: "Dist:", labelDiam: "Ø:"
             },
             en: {
-                welcomeTitle: "TECHNICAL VIEWER", welcomeDesc: "Drag & Drop an .STL file here",
+                welcomeTitle: "TECHNICAL VIEWER", welcomeDesc: "Drag & Drop an .STL file here or...",
+                uploadBtn: "SELECT FILE",
                 toolDist: "Distance (2 Pts)", toolDiam: "Diameter (3 Pts)",
                 toolWire: "Wireframe", toolClear: "Clear", labelDist: "Dist:", labelDiam: "Ø:"
             },
             de: {
-                welcomeTitle: "TECHNISCHER BETRACHTER", welcomeDesc: "Ziehen Sie eine .STL-Datei hierher",
+                welcomeTitle: "TECHNISCHER BETRACHTER", welcomeDesc: "Ziehen Sie eine .STL-Datei hierher oder...",
+                uploadBtn: "DATEI AUSWÄHLEN",
                 toolDist: "Abstand (2 Pkt)", toolDiam: "Durchmesser (3 Pkt)",
                 toolWire: "Drahtgitter", toolClear: "Löschen", labelDist: "Abstand:", labelDiam: "Ø:"
             }
@@ -223,6 +248,7 @@
             window.addEventListener('mousemove', onMouseMove, false);
             window.addEventListener('click', onMouseClick, false);
             setupDragAndDrop();
+            setupFileUpload(); // NUEVA FUNCIÓN
         }
 
         // --- IDIOMAS ---
@@ -231,6 +257,7 @@
             var t = translations[lang];
             document.getElementById('txt-welcome-title').innerText = t.welcomeTitle;
             document.getElementById('txt-welcome-desc').innerText = t.welcomeDesc;
+            document.getElementById('btn-upload-trigger').innerText = t.uploadBtn; // ACTUALIZAR TEXTO BOTÓN
             document.getElementById('txt-tool-dist').innerText = t.toolDist;
             document.getElementById('txt-tool-diam').innerText = t.toolDiam;
             document.getElementById('txt-tool-wire').innerText = t.toolWire;
@@ -322,6 +349,9 @@
         }
 
         function onMouseClick(event) {
+            // Evitar conflictos con el UI layer cuando está visible
+            if (document.getElementById('ui-layer').style.display !== 'none') return;
+            
             if (!activeTool || !currentSnapPoint || !cursorHelper.visible) return;
             addMeasurementPoint(currentSnapPoint);
         }
@@ -467,15 +497,39 @@
             dropZone.addEventListener('drop', function(e) {
                 var file = e.dataTransfer.files[0];
                 if(file) {
-                    var reader = new FileReader();
-                    reader.onload = function(event) {
-                        loadSTL(event.target.result);
-                        document.getElementById('ui-layer').style.display = 'none';
-                        document.getElementById('toolbar').style.display = 'flex';
-                    };
-                    reader.readAsArrayBuffer(file);
+                    processFile(file);
                 }
             }, false);
+        }
+
+        // --- NUEVA LÓGICA DE CARGA DE ARCHIVOS ---
+        function setupFileUpload() {
+            var btn = document.getElementById('btn-upload-trigger');
+            var input = document.getElementById('file-input');
+
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Evita clicks al scene
+                input.click();
+            });
+
+            input.addEventListener('change', function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    processFile(file);
+                }
+                // Resetear input para permitir cargar el mismo archivo de nuevo si se desea
+                input.value = ''; 
+            });
+        }
+
+        function processFile(file) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                loadSTL(event.target.result);
+                document.getElementById('ui-layer').style.display = 'none';
+                document.getElementById('toolbar').style.display = 'flex';
+            };
+            reader.readAsArrayBuffer(file);
         }
 
         function loadSTL(buffer) {
